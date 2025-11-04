@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow_UserManagement</class>
+ <widget class="QMainWindow" name="MainWindow_UserManagement">
+  <property name="windowTitle">
+   <string>Fruit ML - User Management</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="layoutToolbar">
+      <item><widget class="QLineEdit" name="txtSearchUser"><property name="placeholderText"><string>Tìm kiếm người dùng...</string></property></widget></item>
+      <item><widget class="QComboBox" name="comboRoleFilter"><item><property name="text"><string>Tất cả</string></property></item><item><property name="text"><string>User</string></property></item><item><property name="text"><string>Admin</string></property></item></widget></item>
+      <item><widget class="QPushButton" name="btnAddUser"><property name="text"><string>➕ Thêm</string></property></widget></item>
+      <item><widget class="QPushButton" name="btnEditUser"><property name="text"><string>📝 Sửa</string></property></widget></item>
+      <item><widget class="QPushButton" name="btnDeleteUser"><property name="text"><string>❌ Xóa</string></property></widget></item>
+      <item><widget class="QPushButton" name="btnViewUser"><property name="text"><string>🔍 Chi tiết</string></property></widget></item>
+      <item><widget class="QPushButton" name="btnResetPassword"><property name="text"><string>Đặt lại mật khẩu</string></property></widget></item>
+      <item><widget class="QPushButton" name="btnRefreshUsers"><property name="text"><string>Làm mới</string></property></widget></item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QTableWidget" name="tblUsers">
+      <column><property name="text"><string>ID</string></property></column>
+      <column><property name="text"><string>Username</string></property></column>
+      <column><property name="text"><string>Email</string></property></column>
+      <column><property name="text"><string>Role</string></property></column>
+      <column><property name="text"><string>Ngày tạo</string></property></column>
+      <column><property name="text"><string>Lần đăng nhập gần nhất</string></property></column>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow_LoginSignUp</class>
+ <widget class="QMainWindow" name="MainWindow_LoginSignUp">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>892</width>
+    <height>475</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>🍃 Fruit ML - Login / Sign Up</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+    QWidget {
+        background-color: #f7faf7;
+        font-family: &quot;Segoe UI&quot;;
+        font-size: 11pt;
+    }
+    QLabel#lblTitle {
+        color: #2b6a4b;
+        font-size: 20pt;
+        font-weight: bold;
+    }
+    QTabWidget::pane {
+        border: 2px solid #a3c1a1;
+        border-radius: 8px;
+        background: #ffffff;
+    }
+    QTabBar::tab {
+        background: #e6f2eb;
+        color: #2b6a4b;
+        border: 1px solid #a3c1a1;
+        border-bottom: none;
+        border-radius: 6px 6px 0 0;
+        padding: 6px 20px;
+    }
+    QTabBar::tab:selected {
+        background: #cfe8d6;
+        font-weight: 600;
+    }
+    QLineEdit, QComboBox {
+        border: 1px solid #a3c1a1;
+        border-radius: 6px;
+        padding: 6px;
+        background-color: #ffffff;
+    }
+    QPushButton {
+        background-color: #4caf50;
+        color: white;
+        border-radius: 6px;
+        padding: 8px 0;
+        font-weight: 600;
+    }
+    QPushButton:hover {
+        background-color: #45a049;
+    }
+    QPushButton#btnForgotPassword {
+        color: #388e3c;
+        background: transparent;
+        border: none;
+        text-decoration: underline;
+    }
+    QCheckBox {
+        color: #2e2e2e;
+    }
+    QLabel#lblAuthStatus {
+        color: #d32f2f;
+        font-weight: 600;
+    }
+   </string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0">
+    <item>
+     <widget class="QLabel" name="lblTitle">
+      <property name="text">
+       <string>🍎 Fruit ML Login / Sign Up</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTabWidget" name="tabAuth">
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <widget class="QWidget" name="tabLogin">
+       <attribute name="title">
+        <string>Đăng nhập</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLogin">
+        <item row="0" column="0">
+         <widget class="QLabel" name="lblUsernameLogin">
+          <property name="text">
+           <string>Tên đăng nhập:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineEditLoginUsername"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="lblPasswordLogin">
+          <property name="text">
+           <string>Mật khẩu:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="lineEditLoginPassword">
+          <property name="echoMode">
+           <enum>QLineEdit::Password</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="lblRoleLogin">
+          <property name="text">
+           <string>Vai trò:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QComboBox" name="comboRoleLogin">
+          <item>
+           <property name="text">
+            <string>User</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Admin</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="2">
+         <widget class="QCheckBox" name="chkRemember">
+          <property name="text">
+           <string>Ghi nhớ đăng nhập</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QPushButton" name="btnLogin">
+          <property name="text">
+           <string>Đăng nhập</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QPushButton" name="btnForgotPassword">
+          <property name="text">
+           <string>Quên mật khẩu?</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabSignup">
+       <attribute name="title">
+        <string>Đăng ký</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridSignup">
+        <item row="0" column="0">
+         <widget class="QLabel" name="lblUsernameSignup">
+          <property name="text">
+           <string>Tên đăng nhập:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineEditSignupUsername"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="lblEmailSignup">
+          <property name="text">
+           <string>Email:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="lineEditSignupEmail"/>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="lblPasswordSignup">
+          <property name="text">
+           <string>Mật khẩu:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="lineEditSignupPassword">
+          <property name="echoMode">
+           <enum>QLineEdit::Password</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="lblConfirmPassword">
+          <property name="text">
+           <string>Nhập lại mật khẩu:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLineEdit" name="lineEditSignupCFPassword">
+          <property name="echoMode">
+           <enum>QLineEdit::Password</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="lblRoleSignup">
+          <property name="text">
+           <string>Vai trò:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QComboBox" name="comboRoleSignup">
+          <item>
+           <property name="text">
+            <string>User</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Admin</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="5" column="0" colspan="2">
+         <widget class="QPushButton" name="btnSignup">
+          <property name="text">
+           <string>Đăng ký tài khoản</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblAuthStatus">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

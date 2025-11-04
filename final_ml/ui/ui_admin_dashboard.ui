@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow_AdminDashboard</class>
+ <widget class="QMainWindow" name="MainWindow_AdminDashboard">
+  <property name="windowTitle">
+   <string>Fruit ML - Admin Dashboard</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="lblTitle">
+      <property name="text">
+       <string>&lt;h2&gt;Bảng điều khiển (Admin)&lt;/h2&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="layoutStats">
+      <item>
+       <widget class="QGroupBox" name="groupUsers">
+        <property name="title"><string>Người dùng</string></property>
+        <layout class="QVBoxLayout" name="vl1">
+         <item><widget class="QLCDNumber" name="lcdTotalUsers"/></item>
+         <item><widget class="QPushButton" name="btnGoUserManagement"><property name="text"><string>Quản lý người dùng</string></property></widget></item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupPreds">
+        <property name="title"><string>Dự đoán</string></property>
+        <layout class="QVBoxLayout" name="vl2">
+         <item><widget class="QLCDNumber" name="lcdTotalPredictions"/></item>
+         <item><widget class="QPushButton" name="btnGoDataManagement"><property name="text"><string>Quản lý dữ liệu</string></property></widget></item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupRatio">
+        <property name="title"><string>Tỷ lệ Good/Bad</string></property>
+        <layout class="QVBoxLayout" name="vl3">
+         <item><widget class="QProgressBar" name="barGoodRatio"><property name="format"><string>Good %p%</string></property></widget></item>
+         <item><widget class="QProgressBar" name="barBadRatio"><property name="format"><string>Bad %p%</string></property></widget></item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="layoutFilters">
+      <item><widget class="QLabel" name="lblFrom"><property name="text"><string>Từ ngày</string></property></widget></item>
+      <item><widget class="QDateEdit" name="dateFrom"><property name="calendarPopup"><bool>true</bool></property></widget></item>
+      <item><widget class="QLabel" name="lblTo"><property name="text"><string>Đến ngày</string></property></widget></item>
+      <item><widget class="QDateEdit" name="dateTo"><property name="calendarPopup"><bool>true</bool></property></widget></item>
+      <item><widget class="QPushButton" name="btnRefresh"><property name="text"><string>Làm mới</string></property></widget></item>
+      <item><widget class="QPushButton" name="btnModelMonitor"><property name="text"><string>Model Monitor</string></property></widget></item>
+      <item><widget class="QPushButton" name="btnLogout"><property name="text"><string>Đăng xuất</string></property></widget></item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupChart">
+      <property name="title"><string>Biểu đồ Good/Bad (placeholder)</string></property>
+      <layout class="QVBoxLayout" name="vlChart">
+       <item><widget class="QLabel" name="chartPlaceholder"><property name="minimumSize"><size><width>600</width><height>220</height></size></property><property name="frameShape"><enum>QFrame::Box</enum></property><property name="alignment"><set>Qt::AlignCenter</set></property><property name="text"><string>CHART PLACEHOLDER</string></property></widget></item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupRecent">
+      <property name="title"><string>Dự đoán gần đây</string></property>
+      <layout class="QVBoxLayout" name="vlRecent">
+       <item>
+        <widget class="QTableWidget" name="tblRecentPredictions">
+         <column><property name="text"><string>Ảnh</string></property></column>
+         <column><property name="text"><string>Kết quả</string></property></column>
+         <column><property name="text"><string>Confidence</string></property></column>
+         <column><property name="text"><string>Mô hình</string></property></column>
+         <column><property name="text"><string>Người dùng</string></property></column>
+         <column><property name="text"><string>Thời gian</string></property></column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

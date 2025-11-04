@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow_HistorySettings</class>
+ <widget class="QMainWindow" name="MainWindow_HistorySettings">
+  <property name="windowTitle">
+   <string>Fruit ML - Lịch sử &amp; Cài đặt</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTabWidget" name="tabMain">
+      <widget class="QWidget" name="tabHistory">
+       <attribute name="title"><string>Lịch sử</string></attribute>
+       <layout class="QVBoxLayout" name="vlHistory">
+        <item>
+         <layout class="QHBoxLayout" name="layoutFilters">
+          <item><widget class="QLineEdit" name="txtSearchHistory"><property name="placeholderText"><string>Tìm kiếm...</string></property></widget></item>
+          <item><widget class="QComboBox" name="comboLabelHistory"><item><property name="text"><string>Tất cả</string></property></item><item><property name="text"><string>Good</string></property></item><item><property name="text"><string>Bad</string></property></item></widget></item>
+          <item><widget class="QDateEdit" name="dateFrom"><property name="calendarPopup"><bool>true</bool></property></widget></item>
+          <item><widget class="QDateEdit" name="dateTo"><property name="calendarPopup"><bool>true</bool></property></widget></item>
+          <item><widget class="QPushButton" name="btnReloadHistory"><property name="text"><string>Tải lại</string></property></widget></item>
+          <item><widget class="QPushButton" name="btnDeleteHistory"><property name="text"><string>Xóa bản ghi</string></property></widget></item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="tblHistory">
+          <column><property name="text"><string>Ảnh</string></property></column>
+          <column><property name="text"><string>Kết quả</string></property></column>
+          <column><property name="text"><string>Confidence</string></property></column>
+          <column><property name="text"><string>Thời gian</string></property></column>
+          <column><property name="text"><string>Mô hình</string></property></column>
+          <column><property name="text"><string>Lô</string></property></column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabSettings">
+       <attribute name="title"><string>Cài đặt</string></attribute>
+       <layout class="QGridLayout" name="gridSettings">
+        <item row="0" column="0"><widget class="QLabel" name="lblUsername"><property name="text"><string>Username</string></property></widget></item>
+        <item row="0" column="1"><widget class="QLineEdit" name="txtUsername"/></item>
+        <item row="1" column="0"><widget class="QLabel" name="lblEmail"><property name="text"><string>Email</string></property></widget></item>
+        <item row="1" column="1"><widget class="QLineEdit" name="txtEmail"/></item>
+        <item row="2" column="0"><widget class="QLabel" name="lblOldPassword"><property name="text"><string>Mật khẩu cũ</string></property></widget></item>
+        <item row="2" column="1"><widget class="QLineEdit" name="txtOldPassword"><property name="echoMode"><enum>QLineEdit::Password</enum></property></widget></item>
+        <item row="3" column="0"><widget class="QLabel" name="lblNewPassword"><property name="text"><string>Mật khẩu mới</string></property></widget></item>
+        <item row="3" column="1"><widget class="QLineEdit" name="txtNewPassword"><property name="echoMode"><enum>QLineEdit::Password</enum></property></widget></item>
+        <item row="4" column="0"><widget class="QLabel" name="lblConfirmNewPassword"><property name="text"><string>Nhập lại mật khẩu mới</string></property></widget></item>
+        <item row="4" column="1"><widget class="QLineEdit" name="txtConfirmNewPassword"><property name="echoMode"><enum>QLineEdit::Password</enum></property></widget></item>
+        <item row="5" column="0"><widget class="QPushButton" name="btnUpdateProfile"><property name="text"><string>Cập nhật hồ sơ</string></property></widget></item>
+        <item row="5" column="1"><widget class="QPushButton" name="btnChangePassword"><property name="text"><string>Đổi mật khẩu</string></property></widget></item>
+        <item row="6" column="0" colspan="2"><widget class="QPushButton" name="btnLogout"><property name="text"><string>Đăng xuất</string></property></widget></item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
