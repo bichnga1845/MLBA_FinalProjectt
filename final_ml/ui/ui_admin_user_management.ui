@@ -34,7 +34,7 @@
     <item>
      <layout class="QHBoxLayout" name="layoutToolbar">
       <item>
-       <widget class="QLineEdit" name="txtSearchUser">
+       <widget class="QLineEdit" name="lineEditSearchUser">
         <property name="placeholderText">
          <string>Tìm kiếm người dùng...</string>
         </property>
@@ -60,6 +60,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="btnSearchUser">
+        <property name="text">
+         <string>🔍 Tìm Kiếm</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="btnAddUser">
         <property name="text">
          <string>➕ Thêm</string>
@@ -81,7 +88,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnResetPassword">
+       <widget class="QPushButton" name="btnRefreshUser">
         <property name="text">
          <string>Làm mới</string>
         </property>
@@ -90,7 +97,7 @@
      </layout>
     </item>
     <item>
-     <widget class="QTableWidget" name="tblUsers">
+     <widget class="QTableWidget" name="tableWidgetUsers">
       <column>
        <property name="text">
         <string>ID</string>
@@ -98,7 +105,7 @@
       </column>
       <column>
        <property name="text">
-        <string>Username</string>
+        <string>Full Name</string>
        </property>
       </column>
       <column>
@@ -119,6 +126,11 @@
       <column>
        <property name="text">
         <string>Mật khẩu</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Lần đăng nhập cuối</string>
        </property>
       </column>
      </widget>
