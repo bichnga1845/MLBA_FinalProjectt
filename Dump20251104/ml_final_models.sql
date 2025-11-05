@@ -24,18 +24,15 @@ DROP TABLE IF EXISTS `models`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `models` (
   `model_id` int NOT NULL AUTO_INCREMENT,
-  `model_name` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `version` varchar(20) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `model_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `accuracy` float DEFAULT NULL,
-  `dataset_id` int DEFAULT NULL,
   `created_by` int NOT NULL,
+  `file_path` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`model_id`),
-  KEY `dataset_id` (`dataset_id`),
   KEY `created_by` (`created_by`),
-  CONSTRAINT `models_ibfk_1` FOREIGN KEY (`dataset_id`) REFERENCES `datasets` (`dataset_id`) ON DELETE SET NULL,
   CONSTRAINT `models_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `admins` (`admin_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,6 +41,7 @@ CREATE TABLE `models` (
 
 LOCK TABLES `models` WRITE;
 /*!40000 ALTER TABLE `models` DISABLE KEYS */;
+INSERT INTO `models` VALUES (4,'EfficientNetB0',0.8,1,'D:/TMĐT HK6/4.Machine learning/Fruit_Classification/best_fruit_quality_model.h5','2025-11-05 23:11:49'),(5,'MobileNetV2',0.9,1,'D:/TMĐT HK6/4.Machine learning/Fruit_Classification/final_fruit_quality_model.h5','2025-11-05 23:38:28');
 /*!40000 ALTER TABLE `models` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-04 23:30:51
+-- Dump completed on 2025-11-05 23:53:48
