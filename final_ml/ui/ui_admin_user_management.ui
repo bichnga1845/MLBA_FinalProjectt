@@ -81,13 +81,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnViewUser">
-        <property name="text">
-         <string>🔍 Chi tiết</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="btnResetPassword">
         <property name="text">
          <string>Làm mới</string>

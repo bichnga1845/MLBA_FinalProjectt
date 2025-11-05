@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>913</width>
+    <width>653</width>
     <height>424</height>
    </rect>
   </property>
@@ -62,23 +62,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnSetActive">
-        <property name="text">
-         <string>✅ Đặt Active</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="btnRefreshModels">
         <property name="text">
          <string>Làm mới</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnStatistics">
-        <property name="text">
-         <string>Statistics</string>
         </property>
        </widget>
       </item>
@@ -98,17 +84,7 @@
       </column>
       <column>
        <property name="text">
-        <string>Phiên bản</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
         <string>Độ chính xác</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Đang active</string>
        </property>
       </column>
       <column>

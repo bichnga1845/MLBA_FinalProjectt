@@ -33,6 +33,9 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QTabWidget" name="tabMain">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
       <widget class="QWidget" name="tabHistory">
        <attribute name="title">
         <string>Lịch sử</string>
@@ -123,11 +126,6 @@
             <string>Mô hình</string>
            </property>
           </column>
-          <column>
-           <property name="text">
-            <string>Lô</string>
-           </property>
-          </column>
          </widget>
         </item>
        </layout>
@@ -199,24 +197,17 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
-         <widget class="QPushButton" name="btnUpdateProfile">
-          <property name="text">
-           <string>Cập nhật hồ sơ</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="1">
-         <widget class="QPushButton" name="btnChangePassword">
-          <property name="text">
-           <string>Đổi mật khẩu</string>
-          </property>
-         </widget>
-        </item>
         <item row="6" column="0" colspan="2">
          <widget class="QPushButton" name="btnLogout">
           <property name="text">
            <string>Đăng xuất</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0" colspan="2">
+         <widget class="QPushButton" name="btnUpdateProfile">
+          <property name="text">
+           <string>Cập nhật hồ sơ</string>
           </property>
          </widget>
         </item>
