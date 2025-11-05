@@ -137,7 +137,7 @@ class ui_login_signupExt(Ui_MainWindow_LoginSignUp):
             sql_get = "SELECT user_id FROM Users WHERE email=%s"
             new_user = self.mc.fetchone(sql_get, (email,))
             if role == "admin":
-                self.mc.insert_one("INSERT INTO Admins (admin_id, admin_level) VALUES (%s, 'super')", (new_user[0],))
+                self.mc.insert_one("INSERT INTO Admins (admin_id, admin_level) VALUES (%s, 'super_admin')", (new_user[0],))
             else:
                 self.mc.insert_one("INSERT INTO NormalUsers (normal_user_id, organization) VALUES (%s, 'N/A')", (new_user[0],))
 
