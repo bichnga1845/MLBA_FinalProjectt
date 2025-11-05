@@ -45,7 +45,7 @@ class ui_admin_dashboardExt(Ui_MainWindow_AdminDashboard):
     def go_model_mgmt(self):
         from PyQt6.QtWidgets import QMainWindow
         self.window = QMainWindow()
-        self.ui = ui_admin_model_managementExt()
+        self.ui = ui_admin_model_managementExt(self.current_user)
         self.ui.setupUi(self.window)
         self.MainWindow.close()
         self.window.show()
