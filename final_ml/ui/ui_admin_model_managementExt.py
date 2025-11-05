@@ -14,3 +14,4 @@ class ui_admin_model_managementExt(Ui_MainWindow_ModelManagement):
 
     def setupSignalAndSlot(self):
         pass
+    pass

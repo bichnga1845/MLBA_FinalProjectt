@@ -12,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow_ModelManagement(object):
     def setupUi(self, MainWindow_ModelManagement):
         MainWindow_ModelManagement.setObjectName("MainWindow_ModelManagement")
-        MainWindow_ModelManagement.resize(653, 424)
+        MainWindow_ModelManagement.resize(640, 424)
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow_ModelManagement)
         self.centralwidget.setObjectName("centralwidget")
         self.vlRoot = QtWidgets.QVBoxLayout(self.centralwidget)
