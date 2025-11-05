@@ -34,7 +34,7 @@
     <item>
      <widget class="QLabel" name="lblHeader">
       <property name="styleSheet">
-       <string>QLabel#lblHeader{font-size:22px;font-weight:800;color:#0b6d77;}</string>
+       <string notr="true">QLabel#lblHeader{font-size:21px;font-weight:800;color:#0b6d77;}</string>
       </property>
       <property name="text">
        <string>&lt;h2&gt;Dashboard (Admin)&lt;/h2&gt;</string>

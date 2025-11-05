@@ -18,6 +18,7 @@ class Ui_MainWindow_AdminDashboard(object):
         self.vlRoot = QtWidgets.QVBoxLayout(self.centralwidget)
         self.vlRoot.setObjectName("vlRoot")
         self.lblHeader = QtWidgets.QLabel(parent=self.centralwidget)
+        self.lblHeader.setStyleSheet("QLabel#lblHeader{font-size:21px;font-weight:800;color:#0b6d77;}")
         self.lblHeader.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.lblHeader.setObjectName("lblHeader")
         self.vlRoot.addWidget(self.lblHeader)
@@ -73,7 +74,6 @@ class Ui_MainWindow_AdminDashboard(object):
 "    QHeaderView::section { background:#e9f2f3; padding: 6px; border: none; border-right:1px solid #d7e3e4; }\n"
 "    QTableView { gridline-color:#e3ecee; selection-background-color:#b2ebf2; selection-color:#003b40; }\n"
 "    "))
-        self.lblHeader.setStyleSheet(_translate("MainWindow_AdminDashboard", "QLabel#lblHeader{font-size:22px;font-weight:800;color:#0b6d77;}"))
         self.lblHeader.setText(_translate("MainWindow_AdminDashboard", "<h2>Dashboard (Admin)</h2>"))
         self.btnGoUserMgmt.setText(_translate("MainWindow_AdminDashboard", "Quản lý người dùng"))
         self.btnGoDataMgmt.setText(_translate("MainWindow_AdminDashboard", "Quản lý dữ liệu"))
