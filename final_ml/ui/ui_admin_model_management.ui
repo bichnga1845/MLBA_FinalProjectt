@@ -41,6 +41,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="btnSearchModel">
+        <property name="text">
+         <string>🔍 Tìm Kiếm</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="btnAddModel">
         <property name="text">
          <string>➕ Thêm mô hình</string>

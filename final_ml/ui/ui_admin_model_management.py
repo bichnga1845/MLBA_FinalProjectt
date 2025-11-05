@@ -22,6 +22,9 @@ class Ui_MainWindow_ModelManagement(object):
         self.txtSearchModel = QtWidgets.QLineEdit(parent=self.centralwidget)
         self.txtSearchModel.setObjectName("txtSearchModel")
         self.toolbar.addWidget(self.txtSearchModel)
+        self.btnSearchModel = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.btnSearchModel.setObjectName("btnSearchModel")
+        self.toolbar.addWidget(self.btnSearchModel)
         self.btnAddModel = QtWidgets.QPushButton(parent=self.centralwidget)
         self.btnAddModel.setObjectName("btnAddModel")
         self.toolbar.addWidget(self.btnAddModel)
@@ -76,6 +79,7 @@ class Ui_MainWindow_ModelManagement(object):
 "    QTableView { gridline-color:#e3ecee; selection-background-color:#b2ebf2; selection-color:#003b40; }\n"
 "    "))
         self.txtSearchModel.setPlaceholderText(_translate("MainWindow_ModelManagement", "Tìm kiếm mô hình..."))
+        self.btnSearchModel.setText(_translate("MainWindow_ModelManagement", "🔍 Tìm Kiếm"))
         self.btnAddModel.setText(_translate("MainWindow_ModelManagement", "➕ Thêm mô hình"))
         self.btnEditModel.setText(_translate("MainWindow_ModelManagement", "📝 Sửa"))
         self.btnDeleteModel.setText(_translate("MainWindow_ModelManagement", "❌ Xóa"))
