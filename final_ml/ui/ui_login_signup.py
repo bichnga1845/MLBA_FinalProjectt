@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'C:\Users\PC\Downloads\HK2-2024-2025\ĐẠI HỌC\NĂM 3\HK1_2526\MACHINE LEARNING\ML_Pycharm\final_ml\ui\ui_login_signup.ui'
+# Form implementation generated from reading ui file 'D:\TMĐT HK6\4.Machine learning\MLBA_FinalProjectt\final_ml\ui\ui_login_signup.ui'
 #
 # Created by: PyQt6 UI code generator 6.7.1
 #
@@ -171,7 +171,7 @@ class Ui_MainWindow_LoginSignUp(object):
         MainWindow_LoginSignUp.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow_LoginSignUp)
-        self.tabAuth.setCurrentIndex(1)
+        self.tabAuth.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow_LoginSignUp)
 
     def retranslateUi(self, MainWindow_LoginSignUp):
