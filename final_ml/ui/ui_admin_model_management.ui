@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow_ModelManagement</class>
+ <widget class="QMainWindow" name="MainWindow_ModelManagement">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>913</width>
+    <height>424</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Fruit ML - Model Management</string>
+  </property>
+  <property name="styleSheet">
+   <string>
+    * { font-family: &quot;Segoe UI&quot;; }
+    QMainWindow { background: #f7f9fb; }
+    QGroupBox { border: 1px solid #e1e5ea; border-radius: 8px; margin-top: 16px; }
+    QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 4px 8px; color: #0b6d77; font-weight: 600; }
+    QPushButton { padding: 8px 14px; border-radius: 6px; border: 1px solid #2aa1a6; background: #2aa1a6; color: white; }
+    QPushButton:hover { background: #238a8f; }
+    QPushButton#btnLogout { background: #f44336; border-color: #f44336; }
+    QLineEdit, QComboBox, QDateEdit, QTextEdit { border: 1px solid #cfd8dc; border-radius: 6px; padding: 6px 8px; background: white; }
+    QTabBar::tab { padding: 8px 14px; border: 1px solid #cfd8dc; border-bottom: none; background: #f1f5f8; border-top-left-radius: 6px; border-top-right-radius: 6px; }
+    QTabBar::tab:selected { background: white; color: #0b6d77; font-weight: 600; }
+    QHeaderView::section { background:#e9f2f3; padding: 6px; border: none; border-right:1px solid #d7e3e4; }
+    QTableView { gridline-color:#e3ecee; selection-background-color:#b2ebf2; selection-color:#003b40; }
+    </string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="vlRoot">
+    <item>
+     <layout class="QHBoxLayout" name="toolbar">
+      <item>
+       <widget class="QLineEdit" name="txtSearchModel">
+        <property name="placeholderText">
+         <string>Tìm kiếm mô hình...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnAddModel">
+        <property name="text">
+         <string>➕ Thêm mô hình</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnEditModel">
+        <property name="text">
+         <string>📝 Sửa</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnDeleteModel">
+        <property name="text">
+         <string>❌ Xóa</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnSetActive">
+        <property name="text">
+         <string>✅ Đặt Active</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnRefreshModels">
+        <property name="text">
+         <string>Làm mới</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnStatistics">
+        <property name="text">
+         <string>Statistics</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QTableWidget" name="tblModels">
+      <column>
+       <property name="text">
+        <string>ID</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Tên mô hình</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Phiên bản</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Độ chính xác</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Đang active</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Đường dẫn</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Ngày tạo</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

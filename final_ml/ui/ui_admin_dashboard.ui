@@ -2,15 +2,42 @@
 <ui version="4.0">
  <class>MainWindow_AdminDashboard</class>
  <widget class="QMainWindow" name="MainWindow_AdminDashboard">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>471</width>
+    <height>375</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>Fruit ML - Admin Dashboard</string>
   </property>
+  <property name="styleSheet">
+   <string>
+    * { font-family: &quot;Segoe UI&quot;; }
+    QMainWindow { background: #f7f9fb; }
+    QGroupBox { border: 1px solid #e1e5ea; border-radius: 8px; margin-top: 16px; }
+    QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 4px 8px; color: #0b6d77; font-weight: 600; }
+    QPushButton { padding: 8px 14px; border-radius: 6px; border: 1px solid #2aa1a6; background: #2aa1a6; color: white; }
+    QPushButton:hover { background: #238a8f; }
+    QPushButton#btnLogout { background: #f44336; border-color: #f44336; }
+    QLineEdit, QComboBox, QDateEdit, QTextEdit { border: 1px solid #cfd8dc; border-radius: 6px; padding: 6px 8px; background: white; }
+    QTabBar::tab { padding: 8px 14px; border: 1px solid #cfd8dc; border-bottom: none; background: #f1f5f8; border-top-left-radius: 6px; border-top-right-radius: 6px; }
+    QTabBar::tab:selected { background: white; color: #0b6d77; font-weight: 600; }
+    QHeaderView::section { background:#e9f2f3; padding: 6px; border: none; border-right:1px solid #d7e3e4; }
+    QTableView { gridline-color:#e3ecee; selection-background-color:#b2ebf2; selection-color:#003b40; }
+    </string>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="vlRoot">
     <item>
-     <widget class="QLabel" name="lblTitle">
+     <widget class="QLabel" name="lblHeader">
+      <property name="styleSheet">
+       <string>QLabel#lblHeader{font-size:22px;font-weight:800;color:#0b6d77;}</string>
+      </property>
       <property name="text">
-       <string>&lt;h2&gt;Bảng điều khiển (Admin)&lt;/h2&gt;</string>
+       <string>&lt;h2&gt;Dashboard (Admin)&lt;/h2&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -18,71 +45,86 @@
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="layoutStats">
-      <item>
-       <widget class="QGroupBox" name="groupUsers">
-        <property name="title"><string>Người dùng</string></property>
-        <layout class="QVBoxLayout" name="vl1">
-         <item><widget class="QLCDNumber" name="lcdTotalUsers"/></item>
-         <item><widget class="QPushButton" name="btnGoUserManagement"><property name="text"><string>Quản lý người dùng</string></property></widget></item>
-        </layout>
+     <layout class="QGridLayout" name="gridNav">
+      <item row="0" column="0">
+       <widget class="QPushButton" name="btnGoUserMgmt">
+        <property name="minimumSize">
+         <size>
+          <width>220</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Quản lý người dùng</string>
+        </property>
        </widget>
       </item>
-      <item>
-       <widget class="QGroupBox" name="groupPreds">
-        <property name="title"><string>Dự đoán</string></property>
-        <layout class="QVBoxLayout" name="vl2">
-         <item><widget class="QLCDNumber" name="lcdTotalPredictions"/></item>
-         <item><widget class="QPushButton" name="btnGoDataManagement"><property name="text"><string>Quản lý dữ liệu</string></property></widget></item>
-        </layout>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="btnGoDataMgmt">
+        <property name="minimumSize">
+         <size>
+          <width>220</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Quản lý dữ liệu</string>
+        </property>
        </widget>
       </item>
-      <item>
-       <widget class="QGroupBox" name="groupRatio">
-        <property name="title"><string>Tỷ lệ Good/Bad</string></property>
-        <layout class="QVBoxLayout" name="vl3">
-         <item><widget class="QProgressBar" name="barGoodRatio"><property name="format"><string>Good %p%</string></property></widget></item>
-         <item><widget class="QProgressBar" name="barBadRatio"><property name="format"><string>Bad %p%</string></property></widget></item>
-        </layout>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="btnGoModelMgmt">
+        <property name="minimumSize">
+         <size>
+          <width>220</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Quản lý mô hình</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="btnGoStatistics">
+        <property name="minimumSize">
+         <size>
+          <width>220</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Thống kê</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="btnGoHistory">
+        <property name="minimumSize">
+         <size>
+          <width>220</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Lịch sử</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="btnLogout">
+        <property name="minimumSize">
+         <size>
+          <width>220</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Đăng xuất</string>
+        </property>
        </widget>
       </item>
      </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="layoutFilters">
-      <item><widget class="QLabel" name="lblFrom"><property name="text"><string>Từ ngày</string></property></widget></item>
-      <item><widget class="QDateEdit" name="dateFrom"><property name="calendarPopup"><bool>true</bool></property></widget></item>
-      <item><widget class="QLabel" name="lblTo"><property name="text"><string>Đến ngày</string></property></widget></item>
-      <item><widget class="QDateEdit" name="dateTo"><property name="calendarPopup"><bool>true</bool></property></widget></item>
-      <item><widget class="QPushButton" name="btnRefresh"><property name="text"><string>Làm mới</string></property></widget></item>
-      <item><widget class="QPushButton" name="btnModelMonitor"><property name="text"><string>Model Monitor</string></property></widget></item>
-      <item><widget class="QPushButton" name="btnLogout"><property name="text"><string>Đăng xuất</string></property></widget></item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QGroupBox" name="groupChart">
-      <property name="title"><string>Biểu đồ Good/Bad (placeholder)</string></property>
-      <layout class="QVBoxLayout" name="vlChart">
-       <item><widget class="QLabel" name="chartPlaceholder"><property name="minimumSize"><size><width>600</width><height>220</height></size></property><property name="frameShape"><enum>QFrame::Box</enum></property><property name="alignment"><set>Qt::AlignCenter</set></property><property name="text"><string>CHART PLACEHOLDER</string></property></widget></item>
-      </layout>
-     </widget>
-    </item>
-    <item>
-     <widget class="QGroupBox" name="groupRecent">
-      <property name="title"><string>Dự đoán gần đây</string></property>
-      <layout class="QVBoxLayout" name="vlRecent">
-       <item>
-        <widget class="QTableWidget" name="tblRecentPredictions">
-         <column><property name="text"><string>Ảnh</string></property></column>
-         <column><property name="text"><string>Kết quả</string></property></column>
-         <column><property name="text"><string>Confidence</string></property></column>
-         <column><property name="text"><string>Mô hình</string></property></column>
-         <column><property name="text"><string>Người dùng</string></property></column>
-         <column><property name="text"><string>Thời gian</string></property></column>
-        </widget>
-       </item>
-      </layout>
-     </widget>
     </item>
    </layout>
   </widget>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow_UserManagement</class>
+ <widget class="QMainWindow" name="MainWindow_UserManagement">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>798</width>
+    <height>279</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Fruit ML - User Management</string>
+  </property>
+  <property name="styleSheet">
+   <string>
+    * { font-family: &quot;Segoe UI&quot;; }
+    QMainWindow { background: #f7f9fb; }
+    QGroupBox { border: 1px solid #e1e5ea; border-radius: 8px; margin-top: 16px; }
+    QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 4px 8px; color: #0b6d77; font-weight: 600; }
+    QPushButton { padding: 8px 14px; border-radius: 6px; border: 1px solid #2aa1a6; background: #2aa1a6; color: white; }
+    QPushButton:hover { background: #238a8f; }
+    QPushButton#btnLogout { background: #f44336; border-color: #f44336; }
+    QLineEdit, QComboBox, QDateEdit, QTextEdit { border: 1px solid #cfd8dc; border-radius: 6px; padding: 6px 8px; background: white; }
+    QTabBar::tab { padding: 8px 14px; border: 1px solid #cfd8dc; border-bottom: none; background: #f1f5f8; border-top-left-radius: 6px; border-top-right-radius: 6px; }
+    QTabBar::tab:selected { background: white; color: #0b6d77; font-weight: 600; }
+    QHeaderView::section { background:#e9f2f3; padding: 6px; border: none; border-right:1px solid #d7e3e4; }
+    QTableView { gridline-color:#e3ecee; selection-background-color:#b2ebf2; selection-color:#003b40; }
+    </string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="layoutToolbar">
+      <item>
+       <widget class="QLineEdit" name="txtSearchUser">
+        <property name="placeholderText">
+         <string>Tìm kiếm người dùng...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboRoleFilter">
+        <item>
+         <property name="text">
+          <string>Tất cả</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>User</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Admin</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnAddUser">
+        <property name="text">
+         <string>➕ Thêm</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnEditUser">
+        <property name="text">
+         <string>📝 Sửa</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnDeleteUser">
+        <property name="text">
+         <string>❌ Xóa</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnViewUser">
+        <property name="text">
+         <string>🔍 Chi tiết</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnResetPassword">
+        <property name="text">
+         <string>Làm mới</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QTableWidget" name="tblUsers">
+      <column>
+       <property name="text">
+        <string>ID</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Username</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Email</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Role</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Ngày tạo</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Mật khẩu</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

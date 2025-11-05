@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow_DataManagement</class>
+ <widget class="QMainWindow" name="MainWindow_DataManagement">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1850</width>
+    <height>707</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Fruit ML - Data Management</string>
+  </property>
+  <property name="styleSheet">
+   <string>
+    * { font-family: &quot;Segoe UI&quot;; }
+    QMainWindow { background: #f7f9fb; }
+    QGroupBox { border: 1px solid #e1e5ea; border-radius: 8px; margin-top: 16px; }
+    QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 4px 8px; color: #0b6d77; font-weight: 600; }
+    QPushButton { padding: 8px 14px; border-radius: 6px; border: 1px solid #2aa1a6; background: #2aa1a6; color: white; }
+    QPushButton:hover { background: #238a8f; }
+    QPushButton#btnLogout { background: #f44336; border-color: #f44336; }
+    QLineEdit, QComboBox, QDateEdit, QTextEdit { border: 1px solid #cfd8dc; border-radius: 6px; padding: 6px 8px; background: white; }
+    QTabBar::tab { padding: 8px 14px; border: 1px solid #cfd8dc; border-bottom: none; background: #f1f5f8; border-top-left-radius: 6px; border-top-right-radius: 6px; }
+    QTabBar::tab:selected { background: white; color: #0b6d77; font-weight: 600; }
+    QHeaderView::section { background:#e9f2f3; padding: 6px; border: none; border-right:1px solid #d7e3e4; }
+    QTableView { gridline-color:#e3ecee; selection-background-color:#b2ebf2; selection-color:#003b40; }
+    </string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="vlRoot">
+    <item>
+     <layout class="QHBoxLayout" name="layoutToolbar">
+      <item>
+       <widget class="QLineEdit" name="txtSearchData">
+        <property name="placeholderText">
+         <string>Tìm kiếm...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboLabelFilter">
+        <item>
+         <property name="text">
+          <string>Tất cả</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Good</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Bad</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboModelFilter">
+        <item>
+         <property name="text">
+          <string>Model: Tất cả</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtUserFilter">
+        <property name="placeholderText">
+         <string>User...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDateEdit" name="dateFrom">
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDateEdit" name="dateTo">
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnRefreshData">
+        <property name="text">
+         <string>Tìm kiếm</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="layoutMain">
+      <item>
+       <widget class="QTableWidget" name="tblData">
+        <column>
+         <property name="text">
+          <string>ID</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Tên ảnh</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Kết quả</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Confidence</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Người dùng</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Mô hình</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Thời gian</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>True Label</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Relabelled</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTabWidget" name="tabRight">
+        <property name="currentIndex">
+         <number>1</number>
+        </property>
+        <widget class="QWidget" name="tabPreview">
+         <attribute name="title">
+          <string>Preview</string>
+         </attribute>
+         <layout class="QVBoxLayout" name="vlPrev">
+          <item>
+           <widget class="QLabel" name="labelPreview">
+            <property name="minimumSize">
+             <size>
+              <width>360</width>
+              <height>242</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string>QLabel#labelPreview { background:#eef6f7; border:1px dashed #b2c7c9; min-height:240px; }</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="text">
+             <string>Ảnh</string>
+            </property>
+            <property name="scaledContents">
+             <bool>true</bool>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tabDetails">
+         <attribute name="title">
+          <string>Details</string>
+         </attribute>
+         <layout class="QFormLayout" name="formDetails">
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblDId">
+            <property name="text">
+             <string>ID:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="txtDId">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="lblDImage">
+            <property name="text">
+             <string>Image:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="txtDImage">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="lblDResult">
+            <property name="text">
+             <string>Result:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="txtDResult"/>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="lblDConf">
+            <property name="text">
+             <string>Confidence:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="txtDConf"/>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="lblDModel">
+            <property name="text">
+             <string>Model:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="txtDModel"/>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="lblDUser">
+            <property name="text">
+             <string>User:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="txtDUser"/>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="lblDTime">
+            <property name="text">
+             <string>Time:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QLineEdit" name="txtDTime"/>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="lblDNote">
+            <property name="text">
+             <string>Note:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QTextEdit" name="txtDNote"/>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="layoutActions">
+      <item>
+       <widget class="QPushButton" name="btnAddImage">
+        <property name="text">
+         <string>➕ Upload ảnh</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnRelabel">
+        <property name="text">
+         <string>📝 Sửa nhãn</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnDelete">
+        <property name="text">
+         <string>❌ Xóa</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnExport">
+        <property name="text">
+         <string>⬇️ Export</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnAddModel">
+        <property name="text">
+         <string>➕ Thêm mô hình</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnStatistics">
+        <property name="text">
+         <string>📊 Thống kê</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnRefresh">
+        <property name="text">
+         <string>Làm mới</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
