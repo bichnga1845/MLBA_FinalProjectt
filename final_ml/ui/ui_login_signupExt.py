@@ -76,6 +76,15 @@ class ui_login_signupExt(Ui_MainWindow_LoginSignUp):
             else:
                 clear_credentials()
 
+            #Cập nhật last login
+            sql_last_login = """
+                UPDATE Users
+                SET last_login = NOW()
+                WHERE user_id = %s
+            """
+            val=(user[0],)
+            self.mc.insert_one(sql_last_login, val)
+
             current_user = {
                 "user_id": user[0],
                 "full_name": user[1],
@@ -90,10 +99,6 @@ class ui_login_signupExt(Ui_MainWindow_LoginSignUp):
 
         except Exception as e:
             QMessageBox.critical(None, "Lỗi hệ thống", f"Lỗi khi đăng nhập: {e}")
-
-
-
-
 
 
     # ĐĂNG KÝ
@@ -138,6 +143,7 @@ class ui_login_signupExt(Ui_MainWindow_LoginSignUp):
 
         except Exception as e:
             QMessageBox.critical(None, "Lỗi đăng ký", f"Lỗi khi tạo tài khoản: {e}")
+
 
     # QUÊN MẬT KHẨU
 
