@@ -14,3 +14,4 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
 
     def setupSignalAndSlot(self):
         pass
+    pass

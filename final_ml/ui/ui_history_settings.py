@@ -12,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow_HistorySettings(object):
     def setupUi(self, MainWindow_HistorySettings):
         MainWindow_HistorySettings.setObjectName("MainWindow_HistorySettings")
-        MainWindow_HistorySettings.resize(655, 352)
+        MainWindow_HistorySettings.resize(673, 352)
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow_HistorySettings)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
