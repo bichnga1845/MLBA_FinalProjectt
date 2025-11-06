@@ -121,9 +121,9 @@
     <item>
      <layout class="QHBoxLayout" name="layoutButtons">
       <item>
-       <widget class="QPushButton" name="btnSaveHistory">
+       <widget class="QPushButton" name="btnBackDashboard">
         <property name="text">
-         <string>Lưu vào lịch sử</string>
+         <string>Trở về</string>
         </property>
        </widget>
       </item>
@@ -135,9 +135,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnBackDashboard">
+       <widget class="QPushButton" name="btnSaveHistory">
         <property name="text">
-         <string>Trở về Dashboard</string>
+         <string>Lưu vào lịch sử</string>
         </property>
        </widget>
       </item>
