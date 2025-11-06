@@ -99,8 +99,8 @@ class ui_admin_model_managementExt(Ui_MainWindow_ModelManagement):
         model_id = id_item.text()
 
         msg = QMessageBox(self.MainWindow)
-        msg.setText(f"Do you want to delete model {model_id}?")
-        msg.setWindowTitle("Delete confirmation")
+        msg.setText(f"Bạn có muốn xóa model: {model_id}?")
+        msg.setWindowTitle("Xác thực xóa")
         msg.setIcon(QMessageBox.Icon.Question)
         buttons = QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         msg.setStandardButtons(buttons)
@@ -115,7 +115,7 @@ class ui_admin_model_managementExt(Ui_MainWindow_ModelManagement):
         else:
             # use msg for warning
             msg = QMessageBox()
-            msg.setText("Cannot delete model")
-            msg.setWindowTitle("Error")
+            msg.setText("Không thể xóa mô hình")
+            msg.setWindowTitle("Lỗi")
             msg.setIcon(QMessageBox.Icon.Critical)
             msg.exec()
