@@ -32,7 +32,7 @@ CREATE TABLE `models` (
   PRIMARY KEY (`model_id`),
   KEY `created_by` (`created_by`),
   CONSTRAINT `models_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `admins` (`admin_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `models` (
 
 LOCK TABLES `models` WRITE;
 /*!40000 ALTER TABLE `models` DISABLE KEYS */;
-INSERT INTO `models` VALUES (4,'EfficientNetB0',0.8,1,'D:/TMĐT HK6/4.Machine learning/Fruit_Classification/best_fruit_quality_model.h5','2025-11-05 23:11:49'),(5,'MobileNetV2',0.9,1,'D:/TMĐT HK6/4.Machine learning/Fruit_Classification/final_fruit_quality_model.h5','2025-11-05 23:38:28');
+INSERT INTO `models` VALUES (4,'EfficientNetB0 Type and Quality',0.5512,1,'D:/TMĐT HK6/4.Machine learning/MLBA_FinalProjectt/train_ml_result/b0_best_fruit_type_quality_model.h5','2025-11-05 23:11:49'),(5,'MobileNetV2 Quality',0.64,1,'D:/TMĐT HK6/4.Machine learning/MLBA_FinalProjectt/train_ml_result/v2_best_fruit_quality_model.h5','2025-11-05 23:38:28'),(6,'MobileNetV2 Type',0.7737,1,'D:/TMĐT HK6/4.Machine learning/MLBA_FinalProjectt/train_ml_result/v2_best_fruit_type_model.h5','2025-11-06 09:05:11');
 /*!40000 ALTER TABLE `models` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-05 23:53:48
+-- Dump completed on 2025-11-06  9:15:13
