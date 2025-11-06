@@ -174,8 +174,8 @@ class ui_admin_user_managementExt(Ui_MainWindow_UserManagement):
         user_id = id_item.text()
 
         msg = QMessageBox(self.MainWindow)
-        msg.setText(f"Do you want to delete user ID: {user_id}?")
-        msg.setWindowTitle("Delete confirmation")
+        msg.setText(f"Bạn có muốn xóa người dùng với ID {user_id}?")
+        msg.setWindowTitle("Xác thực xóa")
         msg.setIcon(QMessageBox.Icon.Question)
         buttons = QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         msg.setStandardButtons(buttons)
@@ -191,7 +191,7 @@ class ui_admin_user_managementExt(Ui_MainWindow_UserManagement):
         else:
             # use msg for warning
             msg = QMessageBox()
-            msg.setText("Cannot delete user")
-            msg.setWindowTitle("Error")
+            msg.setText("Không thể xóa người dùng")
+            msg.setWindowTitle("Lỗi")
             msg.setIcon(QMessageBox.Icon.Critical)
             msg.exec()
