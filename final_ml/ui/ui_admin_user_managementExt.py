@@ -104,6 +104,10 @@ class ui_admin_user_managementExt(Ui_MainWindow_UserManagement):
                 self.tableWidgetUsers.setItem(row, 4, column_created)
                 self.tableWidgetUsers.setItem(row, 5, column_password)
                 self.tableWidgetUsers.setItem(row, 6, column_last_login)
+
+            self.lineEditSearchUser.setText("")
+            self.comboRoleFilter.setCurrentText("Tất cả")
+
         except Exception as e:
             QMessageBox.critical(self.MainWindow, "Lỗi hệ thống", f"Lỗi khi tải dữ liệu: {e}")
 
