@@ -40,6 +40,8 @@ class ui_admin_model_managementExt(Ui_MainWindow_ModelManagement):
             for col, data in enumerate(model):
                 self.tblModels.setItem(row, col, QtWidgets.QTableWidgetItem(str(data)))
 
+        self.txtSearchModel.clear()
+
     def add_model(self):
         dialog = AddModelDialogExt(self.current_user)
         if dialog.exec():
