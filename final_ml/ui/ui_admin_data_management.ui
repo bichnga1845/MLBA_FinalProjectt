@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1833</width>
-    <height>707</height>
+    <width>1324</width>
+    <height>691</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -104,7 +104,7 @@
        <widget class="QTableWidget" name="tblData">
         <column>
          <property name="text">
-          <string>ID</string>
+          <string>Prediction ID</string>
          </property>
         </column>
         <column>
@@ -144,13 +144,19 @@
         </column>
         <column>
          <property name="text">
-          <string>Relabelled</string>
+          <string>Model ID</string>
          </property>
         </column>
        </widget>
       </item>
       <item>
        <widget class="QTabWidget" name="tabRight">
+        <property name="maximumSize">
+         <size>
+          <width>400</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="currentIndex">
          <number>1</number>
         </property>
@@ -239,15 +245,35 @@
           <item row="3" column="1">
            <widget class="QLineEdit" name="txtDConf"/>
           </item>
-          <item row="4" column="0">
+          <item row="6" column="1">
+           <widget class="QLineEdit" name="txtDModel"/>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="lblDTime">
+            <property name="text">
+             <string>Time:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
+           <widget class="QLineEdit" name="txtDTime"/>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLabel" name="lblDNote">
+            <property name="text">
+             <string>Note:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1">
+           <widget class="QTextEdit" name="txtDNote"/>
+          </item>
+          <item row="6" column="0">
            <widget class="QLabel" name="lblDModel">
             <property name="text">
              <string>Model:</string>
             </property>
            </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QLineEdit" name="txtDModel"/>
           </item>
           <item row="5" column="0">
            <widget class="QLabel" name="lblDUser">
@@ -258,26 +284,6 @@
           </item>
           <item row="5" column="1">
            <widget class="QLineEdit" name="txtDUser"/>
-          </item>
-          <item row="6" column="0">
-           <widget class="QLabel" name="lblDTime">
-            <property name="text">
-             <string>Time:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QLineEdit" name="txtDTime"/>
-          </item>
-          <item row="7" column="0">
-           <widget class="QLabel" name="lblDNote">
-            <property name="text">
-             <string>Note:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="1">
-           <widget class="QTextEdit" name="txtDNote"/>
           </item>
          </layout>
         </widget>
