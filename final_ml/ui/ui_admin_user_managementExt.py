@@ -1,9 +1,11 @@
 from PyQt6.QtWidgets import QTableWidgetItem, QMessageBox
+from PyQt6.QtCore import QSize
 
 from final_ml.connector.ml_connector import FinalConnector
 from final_ml.ui.AddUserDialogExt import AddUserDialogExt
 from final_ml.ui.EditUserDialogExt import EditUserDialogExt
 from final_ml.ui.ui_admin_user_management import Ui_MainWindow_UserManagement
+import qtawesome as qta
 
 
 class ui_admin_user_managementExt(Ui_MainWindow_UserManagement):
@@ -14,9 +16,180 @@ class ui_admin_user_managementExt(Ui_MainWindow_UserManagement):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
         self.MainWindow = MainWindow
+        
+        # Apply premium admin design
+        self.apply_premium_style()
+        self.add_premium_icons()
+        
         self.setupSignalAndSlot()
-
         self.display_users()
+    
+    def apply_premium_style(self):
+        """Apply premium admin stylesheet"""
+        self.MainWindow.setStyleSheet("""
+            /* Main Window */
+            QMainWindow {
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
+                    stop:0 #F8FAF9, stop:1 #E8F5E9);
+            }
+            
+            /* Premium Buttons */
+            QPushButton {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                color: white;
+                border: none;
+                border-radius: 10px;
+                padding: 12px 20px;
+                font-size: 14px;
+                font-weight: 600;
+                min-height: 42px;
+            }
+            
+            QPushButton:hover {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #246A3F, stop:1 #2D7A4E);
+            }
+            
+            QPushButton:pressed {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #1E5A35, stop:1 #246A3F);
+            }
+            
+            /* Input Fields */
+            QLineEdit {
+                border: 2px solid #E0E7E4;
+                border-radius: 10px;
+                padding: 10px 14px;
+                background-color: white;
+                font-size: 14px;
+                min-height: 20px;
+            }
+            
+            QLineEdit:hover {
+                border-color: #4A9D6E;
+            }
+            
+            QLineEdit:focus {
+                border-color: #2D7A4E;
+                background-color: rgba(45, 122, 78, 0.02);
+            }
+            
+            /* ComboBox */
+            QComboBox {
+                border: 2px solid #E0E7E4;
+                border-radius: 10px;
+                padding: 10px 14px;
+                background-color: white;
+                min-height: 20px;
+                font-size: 14px;
+            }
+            
+            QComboBox:hover {
+                border-color: #4A9D6E;
+            }
+            
+            QComboBox::drop-down {
+                border: none;
+                width: 36px;
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+            }
+            
+            QComboBox::down-arrow {
+                image: none;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 6px solid white;
+                margin-right: 10px;
+            }
+            
+            QComboBox QAbstractItemView {
+                background-color: white;
+                border: 2px solid #E0E7E4;
+                border-radius: 8px;
+                selection-background-color: #E8F5E9;
+                selection-color: #2D7A4E;
+                color: #2D7A4E;
+                padding: 4px;
+            }
+            
+            QComboBox QAbstractItemView::item {
+                padding: 8px;
+                border-radius: 4px;
+                color: #2D7A4E;
+            }
+            
+            QComboBox QAbstractItemView::item:hover {
+                background-color: #E8F5E9;
+            }
+            
+            /* Premium Table */
+            QTableWidget {
+                background-color: white;
+                border: none;
+                border-radius: 12px;
+                gridline-color: #F0F4F2;
+            }
+            
+            QHeaderView::section {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                color: white;
+                border: none;
+                border-right: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 14px 12px;
+                font-weight: 600;
+                font-size: 13px;
+                text-transform: uppercase;
+            }
+            
+            QTableWidget::item {
+                padding: 12px 10px;
+                border-bottom: 1px solid #F0F4F2;
+            }
+            
+            QTableWidget::item:selected {
+                background-color: #E8F5E9;
+                color: #2D7A4E;
+            }
+            
+            QTableWidget::item:hover {
+                background-color: rgba(45, 122, 78, 0.05);
+            }
+        """)
+    
+    def add_premium_icons(self):
+        """Add FontAwesome icons to buttons"""
+        try:
+            if hasattr(self, 'btnAddUser'):
+                icon = qta.icon('fa5s.user-plus', color='white', scale_factor=1.2)
+                self.btnAddUser.setIcon(icon)
+                self.btnAddUser.setIconSize(QSize(18, 18))
+            
+            if hasattr(self, 'btnEditUser'):
+                icon = qta.icon('fa5s.edit', color='white', scale_factor=1.2)
+                self.btnEditUser.setIcon(icon)
+                self.btnEditUser.setIconSize(QSize(18, 18))
+            
+            if hasattr(self, 'btnDeleteUser'):
+                icon = qta.icon('fa5s.trash-alt', color='white', scale_factor=1.2)
+                self.btnDeleteUser.setIcon(icon)
+                self.btnDeleteUser.setIconSize(QSize(18, 18))
+            
+            if hasattr(self, 'btnSearchUser'):
+                icon = qta.icon('fa5s.search', color='white', scale_factor=1.2)
+                self.btnSearchUser.setIcon(icon)
+                self.btnSearchUser.setIconSize(QSize(18, 18))
+            
+            if hasattr(self, 'btnRefreshUser'):
+                icon = qta.icon('fa5s.sync-alt', color='white', scale_factor=1.2)
+                self.btnRefreshUser.setIcon(icon)
+                self.btnRefreshUser.setIconSize(QSize(18, 18))
+        except Exception as e:
+            print(f"Could not add icons: {e}")
 
     def setupSignalAndSlot(self):
         self.btnAddUser.clicked.connect(self.add_user)

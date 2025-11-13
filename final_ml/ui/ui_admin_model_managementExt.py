@@ -1,10 +1,12 @@
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QMessageBox
+from PyQt6.QtCore import QSize
 
 from final_ml.connector.ml_connector import FinalConnector
 from final_ml.ui.AddModelDialogExt import AddModelDialogExt
 from final_ml.ui.EditModelDialogExt import EditModelDialogExt
 from final_ml.ui.ui_admin_model_management import Ui_MainWindow_ModelManagement
+import qtawesome as qta
 
 
 class ui_admin_model_managementExt(Ui_MainWindow_ModelManagement):
@@ -17,8 +19,110 @@ class ui_admin_model_managementExt(Ui_MainWindow_ModelManagement):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
         self.MainWindow = MainWindow
+        
+        # Apply premium admin design
+        self.apply_premium_style()
+        self.add_premium_icons()
+        
         self.setupSignalAndSlot()
         self.load_models()
+    
+    def apply_premium_style(self):
+        """Apply premium model management stylesheet"""
+        self.MainWindow.setStyleSheet("""
+            QMainWindow {
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
+                    stop:0 #F8FAF9, stop:1 #E8F5E9);
+            }
+            
+            QPushButton {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                color: white;
+                border: none;
+                border-radius: 10px;
+                padding: 12px 20px;
+                font-size: 14px;
+                font-weight: 600;
+                min-height: 42px;
+            }
+            
+            QPushButton:hover {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #246A3F, stop:1 #2D7A4E);
+            }
+            
+            QLineEdit {
+                border: 2px solid #E0E7E4;
+                border-radius: 10px;
+                padding: 10px 14px;
+                background-color: white;
+                font-size: 14px;
+                min-height: 20px;
+            }
+            
+            QLineEdit:hover {
+                border-color: #4A9D6E;
+            }
+            
+            QTableWidget {
+                background-color: white;
+                border: none;
+                border-radius: 12px;
+                gridline-color: #F0F4F2;
+            }
+            
+            QHeaderView::section {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                color: white;
+                border: none;
+                border-right: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 14px 12px;
+                font-weight: 600;
+                font-size: 13px;
+            }
+            
+            QTableWidget::item {
+                padding: 12px 10px;
+                border-bottom: 1px solid #F0F4F2;
+            }
+            
+            QTableWidget::item:selected {
+                background-color: #E8F5E9;
+                color: #2D7A4E;
+            }
+        """)
+    
+    def add_premium_icons(self):
+        """Add FontAwesome icons to buttons"""
+        try:
+            if hasattr(self, 'btnAddModel'):
+                icon = qta.icon('fa5s.plus-circle', color='white', scale_factor=1.2)
+                self.btnAddModel.setIcon(icon)
+                self.btnAddModel.setIconSize(QSize(18, 18))
+            
+            if hasattr(self, 'btnEditModel'):
+                icon = qta.icon('fa5s.edit', color='white', scale_factor=1.2)
+                self.btnEditModel.setIcon(icon)
+                self.btnEditModel.setIconSize(QSize(18, 18))
+            
+            if hasattr(self, 'btnDeleteModel'):
+                icon = qta.icon('fa5s.trash-alt', color='white', scale_factor=1.2)
+                self.btnDeleteModel.setIcon(icon)
+                self.btnDeleteModel.setIconSize(QSize(18, 18))
+            
+            if hasattr(self, 'btnSearchModel'):
+                icon = qta.icon('fa5s.search', color='white', scale_factor=1.2)
+                self.btnSearchModel.setIcon(icon)
+                self.btnSearchModel.setIconSize(QSize(18, 18))
+            
+            if hasattr(self, 'btnRefreshModels'):
+                icon = qta.icon('fa5s.sync-alt', color='white', scale_factor=1.2)
+                self.btnRefreshModels.setIcon(icon)
+                self.btnRefreshModels.setIconSize(QSize(18, 18))
+        except Exception as e:
+            print(f"Could not add icons: {e}")
 
     def setupSignalAndSlot(self):
         self.btnAddModel.clicked.connect(self.add_model)

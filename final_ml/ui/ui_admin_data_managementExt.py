@@ -1,5 +1,6 @@
 from PyQt6 import QtWidgets, QtGui
 from PyQt6.QtWidgets import QMessageBox, QFileDialog, QTableWidgetItem
+from PyQt6.QtCore import QSize
 import csv
 import os
 from datetime import datetime
@@ -7,6 +8,7 @@ from datetime import datetime
 from final_ml.connector.ml_connector import FinalConnector
 from final_ml.ui.ui_admin_data_management import Ui_MainWindow_DataManagement
 from final_ml.ui.ui_admin_model_managementExt import ui_admin_model_managementExt
+import qtawesome as qta
 
 
 class ui_admin_data_managementExt(Ui_MainWindow_DataManagement):
@@ -19,9 +21,133 @@ class ui_admin_data_managementExt(Ui_MainWindow_DataManagement):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
         self.MainWindow = MainWindow
+        
+        # Apply premium admin design
+        self.apply_premium_style()
+        self.add_premium_icons()
+        
         self.setupSignalAndSlot()
         self.load_all_data()
         self.load_model_filter()
+    
+    def apply_premium_style(self):
+        """Apply premium data management stylesheet"""
+        self.MainWindow.setStyleSheet("""
+            QMainWindow {
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
+                    stop:0 #F8FAF9, stop:1 #E8F5E9);
+            }
+            
+            QPushButton {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                color: white;
+                border: none;
+                border-radius: 10px;
+                padding: 12px 20px;
+                font-size: 14px;
+                font-weight: 600;
+                min-height: 42px;
+            }
+            
+            QPushButton:hover {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #246A3F, stop:1 #2D7A4E);
+            }
+            
+            QLineEdit, QComboBox, QDateEdit {
+                border: 2px solid #E0E7E4;
+                border-radius: 10px;
+                padding: 10px 14px;
+                background-color: white;
+                font-size: 14px;
+                min-height: 20px;
+            }
+            
+            QLineEdit:hover, QComboBox:hover, QDateEdit:hover {
+                border-color: #4A9D6E;
+            }
+            
+            QComboBox::drop-down {
+                border: none;
+                width: 36px;
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+            }
+            
+            QComboBox::down-arrow {
+                image: none;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 6px solid white;
+                margin-right: 10px;
+            }
+            
+            QTableWidget {
+                background-color: white;
+                border: none;
+                border-radius: 12px;
+                gridline-color: #F0F4F2;
+            }
+            
+            QHeaderView::section {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                color: white;
+                border: none;
+                border-right: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 14px 12px;
+                font-weight: 600;
+                font-size: 13px;
+            }
+            
+            QTableWidget::item {
+                padding: 12px 10px;
+                border-bottom: 1px solid #F0F4F2;
+            }
+            
+            QTableWidget::item:selected {
+                background-color: #E8F5E9;
+                color: #2D7A4E;
+            }
+        """)
+    
+    def add_premium_icons(self):
+        """Add FontAwesome icons"""
+        try:
+            if hasattr(self, 'btnAddImage'):
+                icon = qta.icon('fa5s.image', color='white', scale_factor=1.2)
+                self.btnAddImage.setIcon(icon)
+                self.btnAddImage.setIconSize(QSize(18, 18))
+            
+            if hasattr(self, 'btnRelabel'):
+                icon = qta.icon('fa5s.tag', color='white', scale_factor=1.2)
+                self.btnRelabel.setIcon(icon)
+                self.btnRelabel.setIconSize(QSize(18, 18))
+            
+            if hasattr(self, 'btnDelete'):
+                icon = qta.icon('fa5s.trash-alt', color='white', scale_factor=1.2)
+                self.btnDelete.setIcon(icon)
+                self.btnDelete.setIconSize(QSize(18, 18))
+            
+            if hasattr(self, 'btnExport'):
+                icon = qta.icon('fa5s.file-export', color='white', scale_factor=1.2)
+                self.btnExport.setIcon(icon)
+                self.btnExport.setIconSize(QSize(18, 18))
+            
+            if hasattr(self, 'btnRefreshData'):
+                icon = qta.icon('fa5s.search', color='white', scale_factor=1.2)
+                self.btnRefreshData.setIcon(icon)
+                self.btnRefreshData.setIconSize(QSize(18, 18))
+            
+            if hasattr(self, 'btnRefresh'):
+                icon = qta.icon('fa5s.sync-alt', color='white', scale_factor=1.2)
+                self.btnRefresh.setIcon(icon)
+                self.btnRefresh.setIconSize(QSize(18, 18))
+        except Exception as e:
+            print(f"Could not add icons: {e}")
 
     def setupSignalAndSlot(self):
         self.btnRefreshData.clicked.connect(self.search_data)

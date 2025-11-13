@@ -1,11 +1,12 @@
 import json
 import os
-from PyQt6.QtWidgets import QMessageBox
+from PyQt6.QtWidgets import QMessageBox, QMainWindow
+from PyQt6.QtCore import QSize
 from final_ml.connector.ml_connector import FinalConnector
 from final_ml.ui.ui_login_signup import Ui_MainWindow_LoginSignUp
 from final_ml.ui.ui_admin_dashboardExt import ui_admin_dashboardExt
 from final_ml.ui.ui_upload_imageExt import ui_upload_imageExt
-from PyQt6.QtWidgets import QMainWindow
+import qtawesome as qta
 
 
 #GHI NHỚ ĐĂNG NHẬP
@@ -36,8 +37,226 @@ class ui_login_signupExt(Ui_MainWindow_LoginSignUp):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
         self.MainWindow = MainWindow
+        self.apply_premium_styles()
+        self.add_premium_icons()
         self.setupSignalAndSlot()
         self.load_saved_credentials()
+    
+    def apply_premium_styles(self):
+        """Apply ultra premium stylesheet with gradients and effects"""
+        self.MainWindow.setStyleSheet("""
+            /* Main Window Background */
+            QMainWindow {
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
+                    stop:0 #F8FAF9, stop:1 #E8F5E9);
+            }
+            
+            /* Title Styles */
+            QLabel#lblWelcome {
+                font-size: 32px;
+                font-weight: 700;
+                color: #2D7A4E;
+                letter-spacing: -0.5px;
+                background: transparent;
+            }
+            
+            QLabel#lblSubtitle {
+                font-size: 13px;
+                color: #5A7A6A;
+                background: transparent;
+                margin-top: 4px;
+            }
+            
+            /* Field Labels */
+            QLabel {
+                color: #1A3A2E;
+                font-weight: 600;
+                font-size: 12px;
+                background: transparent;
+            }
+            
+            /* Tab Widget */
+            QTabWidget::pane {
+                border: none;
+                background: transparent;
+            }
+            
+            QTabBar::tab {
+                background: transparent;
+                color: #8B9D94;
+                border: none;
+                border-bottom: 3px solid transparent;
+                padding: 10px 24px;
+                font-weight: 600;
+                font-size: 14px;
+                margin-right: 4px;
+            }
+            
+            QTabBar::tab:selected {
+                color: #2D7A4E;
+                border-bottom: 3px solid #2D7A4E;
+            }
+            
+            QTabBar::tab:hover {
+                color: #4A9D6E;
+                background-color: rgba(45, 122, 78, 0.05);
+                border-radius: 8px 8px 0 0;
+            }
+            
+            /* Input Fields with Premium Style */
+            QLineEdit {
+                border: 2px solid #E0E7E4;
+                border-radius: 10px;
+                padding: 11px 14px;
+                background-color: #FFFFFF;
+                font-size: 13px;
+                color: #1A3A2E;
+                min-height: 34px;
+            }
+            
+            QLineEdit:hover {
+                border-color: #4A9D6E;
+                background-color: rgba(45, 122, 78, 0.02);
+            }
+            
+            QLineEdit:focus {
+                border-color: #2D7A4E;
+                background-color: #FAFFFE;
+            }
+            
+            /* ComboBox Premium Style */
+            QComboBox {
+                border: 2px solid #E0E7E4;
+                border-radius: 10px;
+                padding: 9px 12px;
+                background-color: #FFFFFF;
+                color: #2D7A4E;
+                min-height: 34px;
+                font-size: 13px;
+            }
+            
+            QComboBox:hover {
+                border-color: #4A9D6E;
+            }
+            
+            QComboBox:focus {
+                border-color: #2D7A4E;
+            }
+            
+            QComboBox::drop-down {
+                border: none;
+                width: 36px;
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+            }
+            
+            QComboBox::down-arrow {
+                image: none;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 6px solid white;
+                margin-right: 10px;
+            }
+            
+            QComboBox QAbstractItemView {
+                background-color: white;
+                border: 2px solid #E0E7E4;
+                border-radius: 10px;
+                selection-background-color: #E8F5E9;
+                selection-color: #2D7A4E;
+                color: #2D7A4E;
+                padding: 4px;
+            }
+            
+            QComboBox QAbstractItemView::item {
+                padding: 10px;
+                border-radius: 6px;
+                color: #2D7A4E;
+            }
+            
+            QComboBox QAbstractItemView::item:hover {
+                background-color: #E8F5E9;
+            }
+            
+            /* Premium Gradient Buttons */
+            QPushButton {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                color: white;
+                border: none;
+                border-radius: 10px;
+                padding: 12px 20px;
+                font-size: 14px;
+                font-weight: 600;
+                min-height: 38px;
+            }
+            
+            QPushButton:hover {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #246A3F, stop:1 #2D7A4E);
+            }
+            
+            QPushButton:pressed {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #1E5A35, stop:1 #246A3F);
+            }
+            
+            /* Checkbox Premium Style */
+            QCheckBox {
+                color: #2D7A4E;
+                spacing: 8px;
+                font-size: 12px;
+            }
+            
+            QCheckBox::indicator {
+                width: 18px;
+                height: 18px;
+                border: 2px solid #E0E7E4;
+                border-radius: 5px;
+                background-color: white;
+            }
+            
+            QCheckBox::indicator:hover {
+                border-color: #4A9D6E;
+            }
+            
+            QCheckBox::indicator:checked {
+                background-color: #2D7A4E;
+                border-color: #2D7A4E;
+            }
+            
+            /* Card Style */
+            QFrame#loginCard {
+                background-color: rgba(255, 255, 255, 0.98);
+                border: 1px solid rgba(224, 231, 228, 0.5);
+                border-radius: 16px;
+            }
+        """)
+    
+    def add_premium_icons(self):
+        """Add FontAwesome icons to buttons and inputs"""
+        try:
+            # Login button with icon
+            login_icon = qta.icon('fa5s.sign-in-alt', color='white', scale_factor=1.2)
+            self.btnLogin.setIcon(login_icon)
+            self.btnLogin.setIconSize(QSize(18, 18))
+            self.btnLogin.setText("  Đăng nhập")
+            
+            # Signup button with icon
+            signup_icon = qta.icon('fa5s.user-plus', color='white', scale_factor=1.2)
+            self.btnSignup.setIcon(signup_icon)
+            self.btnSignup.setIconSize(QSize(18, 18))
+            self.btnSignup.setText("  Tạo tài khoản")
+            
+            # Forgot password with icon
+            forgot_icon = qta.icon('fa5s.key', color='#2D7A4E', scale_factor=1.0)
+            self.btnForgotPassword.setIcon(forgot_icon)
+            self.btnForgotPassword.setIconSize(QSize(14, 14))
+            
+        except Exception as e:
+            print(f"Could not add icons: {e}")
 
     def setupSignalAndSlot(self):
         self.btnLogin.clicked.connect(self.process_login)
