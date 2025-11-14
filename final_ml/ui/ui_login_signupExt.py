@@ -251,7 +251,7 @@ class ui_login_signupExt(Ui_MainWindow_LoginSignUp):
             self.btnSignup.setText("  Tạo tài khoản")
             
             # Forgot password with icon
-            forgot_icon = qta.icon('fa5s.key', color='#2D7A4E', scale_factor=1.0)
+            forgot_icon = qta.icon('fa5s.key', color='white', scale_factor=1.0)
             self.btnForgotPassword.setIcon(forgot_icon)
             self.btnForgotPassword.setIconSize(QSize(14, 14))
             
@@ -308,7 +308,8 @@ class ui_login_signupExt(Ui_MainWindow_LoginSignUp):
                 "user_id": user[0],
                 "full_name": user[1],
                 "email": user[2],
-                "role": user[4]
+                "role": user[4],
+                "password":user[3]
             }
 
             if role == "admin":
