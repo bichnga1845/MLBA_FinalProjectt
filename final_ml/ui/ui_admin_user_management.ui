@@ -62,28 +62,28 @@
       <item>
        <widget class="QPushButton" name="btnSearchUser">
         <property name="text">
-         <string>🔍 Tìm Kiếm</string>
+         <string>Tìm Kiếm</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnAddUser">
         <property name="text">
-         <string>➕ Thêm</string>
+         <string>Thêm</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnEditUser">
         <property name="text">
-         <string>📝 Sửa</string>
+         <string>Sửa</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnDeleteUser">
         <property name="text">
-         <string>❌ Xóa</string>
+         <string>Xóa</string>
         </property>
        </widget>
       </item>
