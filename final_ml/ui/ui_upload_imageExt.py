@@ -5,6 +5,9 @@ from final_ml.connector.ml_connector import FinalConnector
 from datetime import datetime
 import qtawesome as qta
 
+from final_ml.ui.ui_history_settingsExt import ui_history_settingsExt
+from final_ml.ui.ui_resultExt import ui_resultExt
+
 
 class ui_upload_imageExt(QWidget):
     def __init__(self, current_user):
@@ -13,6 +16,7 @@ class ui_upload_imageExt(QWidget):
         self.mc = FinalConnector()
         
     def setupUi(self, MainWindow):
+        self.MainWindow = MainWindow
         # Apply premium stylesheet
         self.apply_premium_style(MainWindow)
         MainWindow.setWindowTitle("🍎 Fruit ML - Upload & Classify")
@@ -45,6 +49,18 @@ class ui_upload_imageExt(QWidget):
             pass
         layout.addWidget(self.btn_upload)
 
+        # Predict button with icon
+        self.btn_predict = QPushButton("  Dự đoán")
+        self.btn_predict.setObjectName("btnPredict")
+        self.btn_predict.setMinimumHeight(55)
+        try:
+            predict_icon = qta.icon('fa5s.robot', color='white', scale_factor=1.3)
+            self.btn_predict.setIcon(predict_icon)
+            self.btn_predict.setIconSize(QSize(22, 22))
+        except:
+            pass
+        layout.addWidget(self.btn_predict)
+
         # History button with icon
         self.btn_history = QPushButton("  Xem lịch sử dự đoán")
         self.btn_history.setObjectName("btnSecondary")
@@ -58,11 +74,11 @@ class ui_upload_imageExt(QWidget):
         layout.addWidget(self.btn_history)
 
         # Table with premium styling
-        self.tbl_history = QTableWidget()
-        self.tbl_history.setObjectName("premiumTable")
-        self.tbl_history.setColumnCount(5)
-        self.tbl_history.setHorizontalHeaderLabels(["🖼️ Ảnh", "🍎 Loại quả", "⭐ Chất lượng", "📊 Độ tin cậy", "🕐 Thời gian"])
-        layout.addWidget(self.tbl_history)
+        self.tbl_upload = QTableWidget()
+        self.tbl_upload.setObjectName("premiumTable")
+        self.tbl_upload.setColumnCount(3)
+        self.tbl_upload.setHorizontalHeaderLabels(["🖼️ Ảnh", "Đuôi ảnh", "🕐 Ngày upload"])
+        layout.addWidget(self.tbl_upload)
 
         # Logout button with icon
         self.btn_logout = QPushButton("  Đăng xuất")
@@ -76,12 +92,33 @@ class ui_upload_imageExt(QWidget):
             pass
         layout.addWidget(self.btn_logout)
 
+        self.load_all_upload_image()
         # Gán sự kiện
         self.btn_upload.clicked.connect(self.upload_image)
-        self.btn_history.clicked.connect(self.load_history)
+        self.btn_history.clicked.connect(self.open_history)
         self.btn_logout.clicked.connect(self.logout)
+        self.btn_predict.clicked.connect(self.open_predict)
+        self.tbl_upload.itemSelectionChanged.connect(self.choose_img_to_predict)
 
         MainWindow.setCentralWidget(self.central_widget)
+
+    def load_all_upload_image(self):
+        #print(self.current_user)
+        try:
+            self.mc.connect()
+            sql = """SELECT u.image_url, u.image_extension, u.upload_date
+                     FROM Uploads u
+                     WHERE u.user_id = %s
+                     ORDER BY u.upload_date DESC"""
+            data = self.mc.fetchall(sql, (self.current_user['user_id'],))
+            #print(data)
+            self.tbl_upload.setRowCount(0)
+            for row_num, row_data in enumerate(data):
+                self.tbl_upload.insertRow(row_num)
+                for col_num, col_value in enumerate(row_data):
+                    self.tbl_upload.setItem(row_num, col_num, QTableWidgetItem(str(col_value)))
+        except Exception as e:
+            QMessageBox.critical(None, "Lỗi", f"Lỗi khi tải lịch sử: {e}")
 
     def upload_image(self):
         file_dialog = QFileDialog()
@@ -91,42 +128,107 @@ class ui_upload_imageExt(QWidget):
 
         try:
             self.mc.connect()
-            filename = os.path.basename(file_path)
-            ext = os.path.splitext(filename)[1]
-            sql = """INSERT INTO Uploads (user_id, image_url, image_extension, upload_date)
-                     VALUES (%s, %s, %s, %s)"""
-            self.mc.insert_one(sql, (self.current_user['user_id'], file_path, ext, datetime.now()))
+            file_name = os.path.basename(file_path)
+            dest_dir = "../uploads"
+            os.makedirs(dest_dir, exist_ok=True)
+            dest_path = os.path.join(dest_dir, file_name)
+            dest_path = dest_path.replace("\\", "/")
+            if not os.path.exists(dest_path):
+                with open(file_path, "rb") as src, open(dest_path, "wb") as dst:
+                    dst.write(src.read())
 
-            QMessageBox.information(None, "Thành công", f"Ảnh {filename} đã được tải lên thành công!")
+            sql = """INSERT INTO uploads (user_id, image_url, image_extension, upload_date)
+                                 VALUES (%s, %s, %s, %s)"""
+            ext = os.path.splitext(file_name)[1]
+            uid = self.current_user['user_id']
+            self.mc.insert_one(sql, (uid, dest_path, ext, datetime.now()))
+
+            #Lưu đường dẫn hình vừa upload để dự đoán
+            self.image_path=dest_path
+
+            QMessageBox.information(None, "Thành công", f"Ảnh {file_name} đã được tải lên thành công!")
+            self.load_all_upload_image()
+
         except Exception as e:
             QMessageBox.critical(None, "Lỗi", f"Lỗi khi tải ảnh: {e}")
 
-    def load_history(self):
+    def choose_img_to_predict(self):
         try:
-            self.mc.connect()
-            sql = """SELECT image_url, fruit_type, quality_label, confidence, predicted_at
-                     FROM Predictions p
-                     JOIN Uploads u ON p.upload_id = u.upload_id
-                     WHERE u.user_id = %s"""
-            data = self.mc.fetchall(sql, (self.current_user['user_id'],))
-            self.tbl_history.setRowCount(0)
-            for row_num, row_data in enumerate(data):
-                self.tbl_history.insertRow(row_num)
-                for col_num, col_value in enumerate(row_data):
-                    self.tbl_history.setItem(row_num, col_num, QTableWidgetItem(str(col_value)))
+            row = self.tbl_upload.currentRow()
+            if row == -1:
+                return
+
+            # Cột chứa đường dẫn ảnh
+            image_item = self.tbl_upload.item(row, 0)
+
+            if not image_item:
+                QMessageBox.warning(self.MainWindow, "Lỗi", "Không lấy được đường dẫn ảnh từ bảng!")
+                return
+
+            image_path = image_item.text()
+
+            if not os.path.exists(image_path):
+                QMessageBox.warning(self.MainWindow, "Lỗi", f"Ảnh không tồn tại:\n{image_path}")
+                return
+
+            # Lưu lại để dùng cho Predict
+            self.image_path = image_path
+
+            QMessageBox.information(
+                self.MainWindow,
+                "Thành công",
+                f"Đã chọn ảnh để dự đoán:\n{os.path.basename(image_path)}"
+            )
+
         except Exception as e:
-            QMessageBox.critical(None, "Lỗi", f"Lỗi khi tải lịch sử: {e}")
+            QMessageBox.warning(self.MainWindow, "Lỗi chọn ảnh", str(e))
+
+    def open_predict(self):
+        if not hasattr(self, "image_path"):
+            QMessageBox.warning(self, "Thông báo", "Vui lòng upload ảnh trước!")
+            return
+        from PyQt6.QtWidgets import QMainWindow
+        self.window = QMainWindow()
+        self.ui = ui_resultExt(self.current_user,self.image_path)
+        self.ui.setupUi(self.window)
+        self.MainWindow.close()
+        self.window.show()
+
+    def open_history(self):
+        from PyQt6.QtWidgets import QMainWindow
+        self.window = QMainWindow()
+        self.ui = ui_history_settingsExt(self.current_user)
+        self.ui.setupUi(self.window)
+        self.MainWindow.close()
+        self.window.show()
 
     def logout(self):
-        QMessageBox.information(None, "Đăng xuất", "Bạn đã đăng xuất khỏi hệ thống.")
-        from final_ml.ui.ui_login_signupExt import ui_login_signupExt
+        """Đăng xuất khỏi hệ thống và quay lại màn hình đăng nhập"""
         from PyQt6.QtWidgets import QMainWindow
-        self.login_window = QMainWindow()
-        self.ui_login = ui_login_signupExt()
-        self.ui_login.setupUi(self.login_window)
-        self.login_window.show()
-        self.parentWidget().close()
-    
+        from final_ml.ui.ui_login_signupExt import ui_login_signupExt
+
+        # Hộp thoại xác nhận
+        reply = QMessageBox.question(
+            self.MainWindow,
+            "Xác nhận đăng xuất",
+            "Bạn có chắc chắn muốn đăng xuất khỏi hệ thống không?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No
+        )
+
+        # Nếu người dùng chọn "No" → hủy đăng xuất
+        if reply == QMessageBox.StandardButton.No:
+            return
+
+        # Nếu chọn Yes thì tiếp tục
+        QMessageBox.information(self.MainWindow, "Đăng xuất", "Bạn đã đăng xuất khỏi hệ thống.")
+
+        self.window = QMainWindow()
+        self.ui = ui_login_signupExt()
+        self.ui.setupUi(self.window)
+        self.MainWindow.close()
+        self.window.show()
+
     def apply_premium_style(self, widget):
         """Apply ultra premium stylesheet"""
         widget.setStyleSheet("""
@@ -170,6 +272,32 @@ class ui_upload_imageExt(QWidget):
             QPushButton#btnPrimary:pressed {
                 background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
                     stop:0 #1E5A35, stop:1 #246A3F);
+            }
+            
+            /* Predict Button */
+            QPushButton#btnPredict {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                    stop:0 #1565C0, stop:1 #1E88E5);
+                color: white;
+                border: none;
+                border-radius: 12px;
+                padding: 16px 28px;
+                font-size: 16px;
+                font-weight: 600;
+                letter-spacing: 0.3px;
+                box-shadow: 0px 4px 10px rgba(21, 101, 192, 0.3);
+            }
+            
+            QPushButton#btnPredict:hover {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                    stop:0 #0D47A1, stop:1 #1565C0);
+                box-shadow: 0px 6px 14px rgba(21, 101, 192, 0.45);
+            }
+            
+            QPushButton#btnPredict:pressed {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                    stop:0 #0B3C91, stop:1 #0D47A1);
+                box-shadow: inset 0px 3px 8px rgba(0, 0, 0, 0.2);
             }
             
             /* Secondary Button */
