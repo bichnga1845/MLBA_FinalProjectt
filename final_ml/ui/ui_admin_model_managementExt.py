@@ -14,7 +14,7 @@ class ui_admin_model_managementExt(Ui_MainWindow_ModelManagement):
         super().__init__()
         self.mc = FinalConnector()
         self.current_user=current_user
-        #{'user_id': 1, 'full_name': 'Tran Thi Bich Nga', 'email': 'bichnga@hianlab.vn', 'role': 'admin'}
+        #{'user_id': 17, 'full_name': 'sang', 'email': 'sang', 'role': 'admin', 'password': '123'}
 
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)

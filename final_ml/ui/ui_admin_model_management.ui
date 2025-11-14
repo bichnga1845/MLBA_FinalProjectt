@@ -43,28 +43,28 @@
       <item>
        <widget class="QPushButton" name="btnSearchModel">
         <property name="text">
-         <string>🔍 Tìm Kiếm</string>
+         <string>Tìm Kiếm</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnAddModel">
         <property name="text">
-         <string>➕ Thêm mô hình</string>
+         <string>Thêm mô hình</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnEditModel">
         <property name="text">
-         <string>📝 Sửa</string>
+         <string>Sửa</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnDeleteModel">
         <property name="text">
-         <string>❌ Xóa</string>
+         <string>Xóa</string>
         </property>
        </widget>
       </item>

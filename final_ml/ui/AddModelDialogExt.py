@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from PyQt6.QtWidgets import QMessageBox, QDialog, QFileDialog
 from PyQt6.QtCore import QSize
@@ -126,7 +127,15 @@ class AddModelDialogExt(QDialog, Ui_Dialog):
         # Chọn file
         file_path, _ = QFileDialog.getOpenFileName(self, "Chọn file mô hình", "", "All Files (*)")
         if file_path:
-            self.lineEditPath.setText(file_path)
+            file_name = os.path.basename(file_path)
+            dest_dir = "../../train_ml_result"
+            os.makedirs(dest_dir, exist_ok=True)
+            dest_path = os.path.join(dest_dir, file_name)
+            dest_path = dest_path.replace("\\", "/")
+            if not os.path.exists(dest_path):
+                with open(file_path, "rb") as src, open(dest_path, "wb") as dst:
+                    dst.write(src.read())
+            self.lineEditPath.setText(dest_path)
 
     def save_model(self):
         name = self.lineEditName.text().strip()
@@ -134,7 +143,7 @@ class AddModelDialogExt(QDialog, Ui_Dialog):
         path = self.lineEditPath.text().strip()
 
         if not name or not path:
-            QMessageBox.warning(self, "Thiếu thông tin", "Vui lòng điền tên và đường dẫn.")
+            QMessageBox.warning(self, "Thiếu thông tin", "Vui lòng điền tên mô hình và đường dẫn.")
             return
 
         # Chuyển độ chính xác sang float
