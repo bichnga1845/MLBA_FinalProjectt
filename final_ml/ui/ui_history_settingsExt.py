@@ -7,7 +7,7 @@ import qtawesome as qta
 
 
 class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
-    def __init__(self, current_user=None):
+    def __init__(self, current_user):
         """
         Khởi tạo màn hình History & Settings
         
@@ -16,12 +16,8 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
         """
         super().__init__()
         self.mc = FinalConnector()
-        self.current_user = current_user or {
-            'user_id': 1,
-            'username': 'demo_user',
-            'email': 'demo@example.com',
-            'full_name': 'Demo User'
-        }
+        self.current_user = current_user
+        # {'user_id': 17, 'full_name': 'sang', 'email': 'sang', 'role': 'admin', 'password': '123'}
 
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
@@ -208,7 +204,6 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
             print(f"Could not add icons: {e}")
 
     def setupSignalAndSlot(self):
-        """Thiết lập các sự kiện cho các nút và controls"""
         # Tab History
         self.btnReloadHistory.clicked.connect(self.load_history)
         self.btnDeleteHistory.clicked.connect(self.delete_selected_history)
@@ -227,9 +222,9 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
 
     def load_user_info(self):
         """Tải thông tin user lên form Settings"""
-        self.txtUsername.setText(self.current_user.get('username', ''))
+        self.txtUsername.setText(self.current_user.get('full_name', ''))
         self.txtEmail.setText(self.current_user.get('email', ''))
-        self.txtUsername.setReadOnly(True)  # Username không cho sửa
+        self.txtOldPassword.setText(self.current_user.get('password',''))
 
     def load_history(self):
         """Tải lịch sử dự đoán từ database"""
@@ -239,6 +234,7 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
             # Query lấy lịch sử của user hiện tại
             sql = """
                 SELECT 
+                    p.prediction_id,
                     u.image_url,
                     CONCAT(p.fruit_type, ' - ', p.quality_label) as result,
                     p.confidence,
@@ -255,28 +251,33 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
             
             # Hiển thị dữ liệu lên bảng
             self.tblHistory.setRowCount(0)
+            import os
+
             for row_num, row_data in enumerate(data):
                 self.tblHistory.insertRow(row_num)
-                
-                # Ảnh (chỉ hiển thị tên file)
-                import os
-                image_name = os.path.basename(row_data[0]) if row_data[0] else 'N/A'
-                self.tblHistory.setItem(row_num, 0, QTableWidgetItem(image_name))
-                
-                # Kết quả
-                self.tblHistory.setItem(row_num, 1, QTableWidgetItem(str(row_data[1])))
-                
-                # Confidence
-                confidence_str = f"{float(row_data[2]):.2f}%" if row_data[2] else 'N/A'
-                self.tblHistory.setItem(row_num, 2, QTableWidgetItem(confidence_str))
-                
-                # Thời gian
-                time_str = row_data[3].strftime('%Y-%m-%d %H:%M:%S') if row_data[3] else 'N/A'
-                self.tblHistory.setItem(row_num, 3, QTableWidgetItem(time_str))
-                
-                # Mô hình
-                self.tblHistory.setItem(row_num, 4, QTableWidgetItem(str(row_data[4]) if row_data[4] else 'N/A'))
-            
+
+                # 0 — prediction_id
+                self.tblHistory.setItem(row_num, 0, QTableWidgetItem(str(row_data[0])))
+
+                # 1 — image name
+                image_name = os.path.basename(row_data[1]) if row_data[1] else 'N/A'
+                self.tblHistory.setItem(row_num, 1, QTableWidgetItem(image_name))
+
+                # 2 — result
+                self.tblHistory.setItem(row_num, 2, QTableWidgetItem(str(row_data[2])))
+
+                # 3 — confidence
+                conf = f"{float(row_data[3]):.2f}" if row_data[3] else "N/A"
+                self.tblHistory.setItem(row_num, 3, QTableWidgetItem(conf))
+
+                # 4 — timestamp
+                time_str = row_data[4].strftime('%Y-%m-%d %H:%M:%S') if row_data[4] else 'N/A'
+                self.tblHistory.setItem(row_num, 4, QTableWidgetItem(time_str))
+
+                # 5 — model name
+                model_name = row_data[5] if row_data[5] else 'N/A'
+                self.tblHistory.setItem(row_num, 5, QTableWidgetItem(model_name))
+
             # Tự động điều chỉnh độ rộng cột
             self.tblHistory.resizeColumnsToContents()
             
@@ -287,7 +288,7 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
     def filter_history(self):
         """Lọc lịch sử theo tìm kiếm, label và ngày"""
         search_text = self.txtSearchHistory.text().lower()
-        selected_label = self.comboLabelHistory.currentText()
+        selected_label = self.comboLabelHistory.currentText().lower()
         date_from = self.dateFrom.date().toPyDate()
         date_to = self.dateTo.date().toPyDate()
         
@@ -307,12 +308,12 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
             
             # Kiểm tra label filter
             if selected_label != "Tất cả":
-                result_item = self.tblHistory.item(row, 1)
+                result_item = self.tblHistory.item(row, 2)
                 if result_item and selected_label not in result_item.text():
                     show_row = False
             
             # Kiểm tra date range
-            time_item = self.tblHistory.item(row, 3)
+            time_item = self.tblHistory.item(row, 4)
             if time_item:
                 try:
                     time_str = time_item.text()
@@ -326,84 +327,104 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
             self.tblHistory.setRowHidden(row, not show_row)
 
     def delete_selected_history(self):
-        """Xóa các bản ghi được chọn"""
-        selected_rows = set()
-        for item in self.tblHistory.selectedItems():
-            selected_rows.add(item.row())
-        
+        """Xóa bản ghi trong DB và reload lại bảng"""
+        selected_rows = sorted({item.row() for item in self.tblHistory.selectedItems()})
+
         if not selected_rows:
-            QMessageBox.warning(self.MainWindow, "Cảnh báo", 
-                              "Vui lòng chọn ít nhất một bản ghi để xóa!")
+            QMessageBox.warning(self.MainWindow, "Cảnh báo",
+                                "Vui lòng chọn ít nhất một bản ghi để xóa!")
             return
-        
-        # Xác nhận xóa
-        reply = QMessageBox.question(self.MainWindow, "Xác nhận xóa",
-                                     f"Bạn có chắc muốn xóa {len(selected_rows)} bản ghi?",
-                                     QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
-        
-        if reply == QMessageBox.StandardButton.Yes:
-            try:
-                self.mc.connect()
-                
-                # Xóa từng bản ghi (cần có prediction_id hoặc logic khác)
-                # Tạm thời chỉ xóa khỏi UI
-                for row in sorted(selected_rows, reverse=True):
-                    self.tblHistory.removeRow(row)
-                
-                QMessageBox.information(self.MainWindow, "Thành công", 
-                                      f"Đã xóa {len(selected_rows)} bản ghi!")
-                
-            except Exception as e:
-                QMessageBox.critical(self.MainWindow, "Lỗi", 
-                                   f"Lỗi khi xóa: {e}")
+
+        # Xác nhận
+        reply = QMessageBox.question(
+            self.MainWindow, "Xác nhận xóa",
+            f"Bạn có chắc muốn xóa {len(selected_rows)} bản ghi?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+
+        if reply != QMessageBox.StandardButton.Yes:
+            return
+
+        try:
+            self.mc.connect()
+
+            for row in selected_rows:
+                pred_id_item = self.tblHistory.item(row, 0)
+                if pred_id_item:
+                    pred_id = pred_id_item.text()
+                    sql = "DELETE FROM Predictions WHERE prediction_id = %s"
+                    self.mc.insert_one(sql, (pred_id,))
+
+            QMessageBox.information(
+                self.MainWindow, "Thành công",
+                f"Đã xóa {len(selected_rows)} bản ghi!"
+            )
+
+            # Load lại bảng sau khi xóa
+            self.load_history()
+
+        except Exception as e:
+            QMessageBox.critical(
+                self.MainWindow, "Lỗi",
+                f"Không thể xóa bản ghi:\n{e}"
+            )
 
     def update_profile(self):
         """Cập nhật thông tin cá nhân và đổi mật khẩu"""
+        new_username=self.txtUsername.text().strip()
         new_email = self.txtEmail.text().strip()
         old_password = self.txtOldPassword.text()
         new_password = self.txtNewPassword.text()
         confirm_password = self.txtConfirmNewPassword.text()
         
         # Validate
-        if not new_email:
-            QMessageBox.warning(self.MainWindow, "Cảnh báo", "Email không được để trống!")
+        if not new_username:
+            QMessageBox.warning(self.MainWindow, "Cảnh báo", "Username không được để trống!")
+            return
+
+        if not new_email or "@" not in new_email:
+            QMessageBox.warning(self.MainWindow, "Cảnh báo", "Email không hợp lệ!")
             return
         
         # Nếu muốn đổi mật khẩu
-        if old_password or new_password or confirm_password:
+        want_change_pw = any([new_password, confirm_password])
+        if want_change_pw:
             if not all([old_password, new_password, confirm_password]):
-                QMessageBox.warning(self.MainWindow, "Cảnh báo", 
-                                  "Vui lòng điền đầy đủ thông tin mật khẩu!")
+                QMessageBox.warning(self.MainWindow, "Cảnh báo", "Vui lòng điền đầy đủ thông tin mật khẩu!")
                 return
-            
             if new_password != confirm_password:
-                QMessageBox.warning(self.MainWindow, "Cảnh báo", 
-                                  "Mật khẩu mới và xác nhận không khớp!")
-                return
-            
-            if len(new_password) < 6:
-                QMessageBox.warning(self.MainWindow, "Cảnh báo", 
-                                  "Mật khẩu mới phải có ít nhất 6 ký tự!")
+                QMessageBox.warning(self.MainWindow, "Cảnh báo", "Mật khẩu mới và xác nhận không khớp!")
                 return
         
         try:
             self.mc.connect()
-            
-            # Cập nhật email
-            sql_update = "UPDATE Users SET email = %s WHERE user_id = %s"
-            self.mc.execute_query(sql_update, (new_email, self.current_user['user_id']))
-            
-            # Cập nhật password nếu có
-            if new_password:
-                # TODO: Cần verify old_password trước
-                sql_password = "UPDATE Users SET password = %s WHERE user_id = %s"
-                # Nên hash password trước khi lưu
-                self.mc.execute_query(sql_password, (new_password, self.current_user['user_id']))
-            
-            QMessageBox.information(self.MainWindow, "Thành công", 
-                                  "Cập nhật thông tin thành công!")
-            
-            # Xóa các trường password
+
+            # UPDATE user info
+            sql_user = """
+                        UPDATE Users 
+                        SET full_name = %s, email = %s 
+                        WHERE user_id = %s
+                    """
+            self.mc.insert_one(sql_user, (new_username, new_email, self.current_user['user_id']))
+
+            # ĐỔI PASSWORD THÌ XỬ LÝ
+            if want_change_pw:
+                # Verify old password
+                sql_check = "SELECT password FROM Users WHERE user_id=%s"
+                old_pw_db = self.mc.fetchone(sql_check, (self.current_user['user_id'],))
+                if not old_pw_db or old_password != old_pw_db[0]:
+                    QMessageBox.warning(self.MainWindow, "Sai mật khẩu", "Mật khẩu cũ không chính xác!")
+                    return
+                # Update new password
+                sql_pw = "UPDATE Users SET password=%s WHERE user_id=%s"
+                self.mc.insert_one(sql_pw, (new_password, self.current_user['user_id']))
+                self.current_user['password'] = new_password
+
+                # Update current_user
+            self.current_user['full_name'] = new_username
+            self.current_user['email'] = new_email
+
+            QMessageBox.information(self.MainWindow, "Thành công", "Cập nhật thông tin thành công!")
             self.txtOldPassword.clear()
             self.txtNewPassword.clear()
             self.txtConfirmNewPassword.clear()
