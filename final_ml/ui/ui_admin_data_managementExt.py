@@ -277,6 +277,7 @@ class ui_admin_data_managementExt(Ui_MainWindow_DataManagement):
             dest_dir = "../uploads"
             os.makedirs(dest_dir, exist_ok=True)
             dest_path = os.path.join(dest_dir, file_name)
+            dest_path=dest_path.replace("\\", "/")
             if not os.path.exists(dest_path):
                 with open(file_path, "rb") as src, open(dest_path, "wb") as dst:
                     dst.write(src.read())

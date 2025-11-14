@@ -296,28 +296,28 @@
       <item>
        <widget class="QPushButton" name="btnAddImage">
         <property name="text">
-         <string>➕ Upload ảnh</string>
+         <string>Upload ảnh</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnRelabel">
         <property name="text">
-         <string>📝 Sửa nhãn</string>
+         <string>Sửa nhãn</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnDelete">
         <property name="text">
-         <string>❌ Xóa</string>
+         <string>Xóa</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnExport">
         <property name="text">
-         <string>⬇️ Export</string>
+         <string>Export</string>
         </property>
        </widget>
       </item>
