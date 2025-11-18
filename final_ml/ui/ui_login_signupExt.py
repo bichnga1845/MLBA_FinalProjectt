@@ -52,7 +52,7 @@ class ui_login_signupExt(Ui_MainWindow_LoginSignUp):
             }
             
             /* Title Styles */
-            QLabel#lblWelcome {
+            QLabel#lblTitle {
                 font-size: 32px;
                 font-weight: 700;
                 color: #2D7A4E;
@@ -275,7 +275,6 @@ class ui_login_signupExt(Ui_MainWindow_LoginSignUp):
     def process_login(self):
         email = self.lineEditLoginUsername.text().strip()
         pwd = self.lineEditLoginPassword.text().strip()
-        role = self.comboRoleLogin.currentText().lower()
 
         if not email or not pwd:
             QMessageBox.warning(None, "Thiếu thông tin", "Vui lòng nhập đầy đủ email và mật khẩu.")
@@ -283,8 +282,8 @@ class ui_login_signupExt(Ui_MainWindow_LoginSignUp):
 
         try:
             self.mc.connect()
-            sql = "SELECT * FROM Users WHERE email=%s AND password=%s AND role=%s"
-            user = self.mc.fetchone(sql, (email, pwd, role))
+            sql = "SELECT * FROM Users WHERE email=%s AND password=%s"
+            user = self.mc.fetchone(sql, (email, pwd))
 
             if user is None:
                 QMessageBox.critical(None, "Đăng nhập thất bại", "Email hoặc mật khẩu không đúng.")
@@ -312,7 +311,7 @@ class ui_login_signupExt(Ui_MainWindow_LoginSignUp):
                 "password":user[3]
             }
 
-            if role == "admin":
+            if current_user['role'] == "admin":
                 self.open_admin_dashboard(current_user)
             else:
                 self.open_user_upload(current_user)
