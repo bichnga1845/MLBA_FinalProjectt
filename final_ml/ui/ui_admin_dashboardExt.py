@@ -165,7 +165,7 @@ class ui_admin_dashboardExt(Ui_MainWindow_AdminDashboard):
     def go_history_and_setting(self):
         from PyQt6.QtWidgets import QMainWindow
         self.window = QMainWindow()
-        self.ui = ui_history_settingsExt()
+        self.ui = ui_history_settingsExt(self.current_user)
         self.ui.setupUi(self.window)
         self.MainWindow.close()
         self.window.show()
