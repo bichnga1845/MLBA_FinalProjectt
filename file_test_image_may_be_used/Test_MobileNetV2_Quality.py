@@ -14,19 +14,74 @@ import seaborn as sns
 from sklearn.metrics import classification_report, confusion_matrix
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 from pathlib import Path
+import builtins
+
+
+def print(*args, **kwargs):
+    """Ensure ascii-only console output to avoid encoding errors."""
+    cleaned = []
+    for arg in args:
+        if isinstance(arg, str):
+            cleaned.append(arg.encode("ascii", "ignore").decode("ascii"))
+        else:
+            cleaned.append(arg)
+    builtins.print(*cleaned, **kwargs)
+
+# Register custom compatibility layer for legacy Rescaling/TrueDivide
+@keras.utils.register_keras_serializable(name="TrueDivide")
+class TrueDivideLayer(keras.layers.Layer):
+    """Compatibility layer for legacy TFOp true_divide nodes."""
+
+    def __init__(self, divisor=255.0, **kwargs):
+        super().__init__(**kwargs)
+        self.divisor = divisor
+
+    def call(self, inputs, *args, **kwargs):
+        if isinstance(inputs, (list, tuple)) and len(inputs) >= 2:
+            numerator, denominator = inputs[:2]
+        else:
+            numerator = inputs
+            if args:
+                denominator = args[0]
+            else:
+                denominator = kwargs.get("y", self.divisor)
+            denominator = tf.convert_to_tensor(denominator, dtype=tf.float32)
+        numerator = tf.cast(numerator, tf.float32)
+        denominator = tf.cast(denominator, tf.float32)
+        return tf.math.divide(numerator, denominator)
+
+    def get_config(self):
+        config = super().get_config()
+        config.update({"divisor": float(self.divisor)})
+        return config
+
+keras.utils.get_custom_objects()["TrueDivide"] = TrueDivideLayer
 
 # ==================== CONFIGURATION ====================
 # Get project root directory (Final_Project/)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Define paths based on actual structure
-MODEL_DIR = os.path.join(BASE_DIR, 'Model')
-MODEL_PATH = os.path.join(MODEL_DIR, 'mobilenetv2_model.keras')
-BEST_MODEL_PATH = os.path.join(MODEL_DIR, 'best_model.h5')
-CLASS_INDICES_PATH = os.path.join(MODEL_DIR, 'class_indices.npy')
+# In dự án hiện tại các mô hình đã train nằm trong thư mục train_ml_result
+TRAIN_RESULT_DIR = os.path.join(BASE_DIR, 'train_ml_result')
+MODEL_DIR = TRAIN_RESULT_DIR
+MODEL_PATH = os.path.join(TRAIN_RESULT_DIR, 'v2_best_fruit_quality_model.h5')
+BEST_MODEL_PATH = MODEL_PATH  # giữ compatibility
+CLASS_INDICES_PATH = os.path.join(TRAIN_RESULT_DIR, 'class_indices.npy')
+
+# Nếu bạn vẫn có Dataset/Test cũ, có thể cập nhật lại đường dẫn này
 DATASET_DIR = os.path.join(BASE_DIR, 'Dataset')
 TEST_DIR = os.path.join(BASE_DIR, 'Test')
 SINGLE_IMAGE_TEST_DIR = os.path.join(TEST_DIR, 'Single_Image_Test')
+
+# class mặc định (Fruit_Quality) để chạy được dù không có class_indices.npy
+DEFAULT_CLASS_NAMES = [
+    'Apple_Bad', 'Apple_Good',
+    'Banana_Bad', 'Banana_Good',
+    'Guava_Bad', 'Guava_Good',
+    'Lime_Bad', 'Lime_Good',
+    'Orange_Bad', 'Orange_Good',
+    'Pomegranate_Bad', 'Pomegranate_Good'
+]
 
 IMG_SIZE = (160, 160)
 BATCH_SIZE = 32
@@ -53,63 +108,32 @@ def load_model_and_classes():
 
     model = None
 
-    # Try loading different model formats in priority order
-    # Priority: .keras > SavedModel > .h5 (h5 has compatibility issues with Keras 3)
-
+    # Load trực tiếp file .h5 có sẵn trong train_ml_result
     if os.path.exists(MODEL_PATH):
         print(f"Loading model from: {MODEL_PATH}")
         try:
-            model = keras.models.load_model(MODEL_PATH)
-            print("✓ Keras model (.keras) loaded successfully")
-        except Exception as e:
-            print(f"✗ Failed to load .keras model: {e}")
-
-    if model is None:
-        # Try SavedModel format
-        saved_model_path = os.path.join(MODEL_DIR, 'saved_model')
-        if os.path.exists(saved_model_path):
-            print(f"Loading SavedModel from: {saved_model_path}")
-            try:
-                model = keras.models.load_model(saved_model_path)
-                print("✓ SavedModel loaded successfully")
-            except Exception as e:
-                print(f"✗ Failed to load SavedModel: {e}")
-
-    if model is None and os.path.exists(BEST_MODEL_PATH):
-        # Last resort: try .h5 with custom objects
-        print(f"Attempting to load .h5 model from: {BEST_MODEL_PATH}")
-        print("⚠ Note: .h5 format may have compatibility issues with Keras 3")
-        try:
-            # Try with compile=False to avoid optimizer issues
-            model = keras.models.load_model(BEST_MODEL_PATH, compile=False)
-            print("✓ H5 model loaded (without compilation)")
-
-            # Recompile the model
+            custom_objects = {"TrueDivide": TrueDivideLayer}
+            model = keras.models.load_model(MODEL_PATH, custom_objects=custom_objects, compile=False)
+            print("✓ H5 model loaded successfully")
             model.compile(
                 optimizer=keras.optimizers.Adam(learning_rate=0.001),
                 loss='categorical_crossentropy',
                 metrics=['accuracy']
             )
-            print("✓ Model recompiled successfully")
         except Exception as e:
-            print(f"✗ Failed to load .h5 model: {e}")
-
-    if model is None:
-        print("\n✗ ERROR: No model could be loaded!")
-        print(f"Searched locations:")
-        print(f"  - {MODEL_PATH} (.keras format)")
-        print(f"  - {os.path.join(MODEL_DIR, 'saved_model')} (SavedModel format)")
-        print(f"  - {BEST_MODEL_PATH} (.h5 format)")
-        print("\n💡 Suggestion: Make sure you have trained the model first using MobileNetV2.py")
+            print(f"✗ Failed to load model: {e}")
+            sys.exit(1)
+    else:
+        print(f"✗ Model not found at {MODEL_PATH}")
         sys.exit(1)
 
     # Load class indices
-    if not os.path.exists(CLASS_INDICES_PATH):
-        print(f"✗ ERROR: Class indices not found at {CLASS_INDICES_PATH}")
-        sys.exit(1)
-
-    class_indices = np.load(CLASS_INDICES_PATH, allow_pickle=True).item()
-    class_names = {v: k for k, v in class_indices.items()}
+    if os.path.exists(CLASS_INDICES_PATH):
+        class_indices = np.load(CLASS_INDICES_PATH, allow_pickle=True).item()
+        class_names = {v: k for k, v in class_indices.items()}
+    else:
+        print(f"⚠ class_indices.npy not found, using default ordering.")
+        class_names = {idx: name for idx, name in enumerate(DEFAULT_CLASS_NAMES)}
 
     print(f"\nClasses loaded: {list(class_names.values())}")
     print(f"Number of classes: {len(class_names)}")

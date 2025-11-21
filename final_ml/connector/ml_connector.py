@@ -2,10 +2,8 @@ import mysql.connector
 import traceback
 import pandas as pd
 
-
-
 class FinalConnector:
-    def __init__(self,server="localhost", port=3306, database="ml_final", username="BichNga", password="@Bichnga184"):
+    def __init__(self,server="localhost", port=3306, database="ml_final", username="root", password="Gamer.8071"):
         self.server=server
         self.port=port
         self.database=database
@@ -18,7 +16,9 @@ class FinalConnector:
                 port=self.port,
                 database=self.database,
                 user=self.username,
-                password=self.password)
+                password=self.password,
+                use_pure = True,
+                connection_timeout=5)
             return self.conn
         except:
             self.conn=None
@@ -50,7 +50,7 @@ class FinalConnector:
         return tablesName
     def fetchone(self,sql,val):
         try:
-            cursor = self.conn.cursor()
+            cursor = self.conn.cursor(buffered=True)
             cursor.execute(sql,val)
             one_item = cursor.fetchone()
             cursor.close()
@@ -68,7 +68,7 @@ class FinalConnector:
         except:
             traceback.print_exc()
         return None
-    def insert_one(self,sql,val):
+    def insert_one(self,sql,val): #insert_update_delete
         cursor = self.conn.cursor()
         cursor.execute(sql, val)
         self.conn.commit()

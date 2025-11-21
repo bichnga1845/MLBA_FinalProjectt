@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtCore import QSize
 from final_ml.connector.ml_connector import FinalConnector
+from final_ml.ui.statistics_window import StatisticsWindow
 from final_ml.ui.ui_admin_dashboard import Ui_MainWindow_AdminDashboard
 from final_ml.ui.ui_admin_data_managementExt import ui_admin_data_managementExt
 from final_ml.ui.ui_admin_model_managementExt import ui_admin_model_managementExt
@@ -13,6 +14,8 @@ class ui_admin_dashboardExt(Ui_MainWindow_AdminDashboard):
     def __init__(self, current_user):
         super().__init__()
         self.current_user = current_user
+        self._child_windows = []
+        self._statistics_window = None
         self.mc = FinalConnector()
 
     def setupUi(self, MainWindow):
@@ -87,6 +90,26 @@ class ui_admin_dashboardExt(Ui_MainWindow_AdminDashboard):
                 font-weight: 600;
                 text-transform: uppercase;
             }
+            
+            /* Scrollbar styles */
+            QScrollBar:vertical {
+                background: #F8FAF9;
+                width: 14px;
+                margin: 0px;
+                border-radius: 7px;
+            }
+            
+            QScrollBar::handle:vertical {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                border-radius: 7px;
+                min-height: 30px;
+            }
+            
+            QScrollBar::handle:vertical:hover {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #246A3F, stop:1 #2D7A4E);
+            }
         """)
     
     def add_premium_icons(self):
@@ -138,27 +161,41 @@ class ui_admin_dashboardExt(Ui_MainWindow_AdminDashboard):
         self.btnGoStatistics.clicked.connect(self.show_statistics)
         self.btnLogout.clicked.connect(self.process_log_out)
 
+    def _register_child_window(self, window):
+        self._child_windows.append(window)
+
+        def _cleanup():
+            try:
+                self._child_windows.remove(window)
+            except ValueError:
+                pass
+
+        window.destroyed.connect(_cleanup)
+
     def go_user_mgmt(self):
         from PyQt6.QtWidgets import QMainWindow
         self.window = QMainWindow()
-        self.ui = ui_admin_user_managementExt()
+        self.ui = ui_admin_user_managementExt(self.current_user)
         self.ui.setupUi(self.window)
-        self.MainWindow.close()
         self.window.show()
+        self._register_child_window(self.window)
+        self.MainWindow.close()
 
     def go_data_mgmt(self):
         from PyQt6.QtWidgets import QMainWindow
         self.window = QMainWindow()
         self.ui = ui_admin_data_managementExt(self.current_user)
         self.ui.setupUi(self.window)
-        self.MainWindow.close()
         self.window.show()
+        self._register_child_window(self.window)
+        self.MainWindow.close()
 
     def go_model_mgmt(self):
         from PyQt6.QtWidgets import QMainWindow
         self.window = QMainWindow()
         self.ui = ui_admin_model_managementExt(self.current_user)
         self.ui.setupUi(self.window)
+        self._register_child_window(self.window)
         self.MainWindow.close()
         self.window.show()
 
@@ -167,22 +204,19 @@ class ui_admin_dashboardExt(Ui_MainWindow_AdminDashboard):
         self.window = QMainWindow()
         self.ui = ui_history_settingsExt(self.current_user)
         self.ui.setupUi(self.window)
+        self._register_child_window(self.window)
         self.MainWindow.close()
         self.window.show()
 
     def show_statistics(self):
         try:
-            self.mc.connect()
-            sql = "SELECT COUNT(*) FROM Users WHERE role='user';"
-            total_users = self.mc.fetchone(sql, ())[0]
-
-            sql2 = "SELECT COUNT(*) FROM Uploads;"
-            total_uploads = self.mc.fetchone(sql2, ())[0] #if self.mc.fetchone(sql2, ()) else 0
-
-            msg = f"Tổng số người dùng (user): {total_users}\nTổng số lượt upload: {total_uploads}"
-            QMessageBox.information(None, "Thống kê hệ thống", msg)
+            if self._statistics_window is None or not self._statistics_window.isVisible():
+                self._statistics_window = StatisticsWindow(self.MainWindow)
+                self._statistics_window.destroyed.connect(lambda: setattr(self, '_statistics_window', None))
+            self._statistics_window.show()
+            self._statistics_window.raise_()
         except Exception as e:
-            QMessageBox.critical(None, "Lỗi", f"Lỗi khi truy xuất thống kê: {e}")
+            QMessageBox.critical(self.MainWindow, "L\u1ed7i", f"L\u1ed7i khi m\u1edf th\u1ed1ng k\xea: {e}")
 
     def process_log_out(self):
         confirmation = QMessageBox.question(None,

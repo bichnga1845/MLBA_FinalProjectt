@@ -9,9 +9,10 @@ import qtawesome as qta
 
 
 class ui_admin_user_managementExt(Ui_MainWindow_UserManagement):
-    def __init__(self):
+    def __init__(self, current_user=None):
         super().__init__()
         self.mc = FinalConnector()
+        self.current_user = current_user
 
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
@@ -39,11 +40,11 @@ class ui_admin_user_managementExt(Ui_MainWindow_UserManagement):
                     stop:0 #2D7A4E, stop:1 #4A9D6E);
                 color: white;
                 border: none;
-                border-radius: 10px;
-                padding: 12px 20px;
+                border-radius: 12px;
+                padding: 14px 22px;
                 font-size: 14px;
                 font-weight: 600;
-                min-height: 42px;
+                min-height: 44px;
             }
             
             QPushButton:hover {
@@ -56,14 +57,26 @@ class ui_admin_user_managementExt(Ui_MainWindow_UserManagement):
                     stop:0 #1E5A35, stop:1 #246A3F);
             }
             
+            QPushButton[secondary="true"] {
+                background: white;
+                color: #2D7A4E;
+                border: 2px solid #2D7A4E;
+            }
+            
+            QPushButton[secondary="true"]:hover {
+                background: #E8F5E9;
+                border-color: #4A9D6E;
+            }
+            
             /* Input Fields */
             QLineEdit {
                 border: 2px solid #E0E7E4;
                 border-radius: 10px;
-                padding: 10px 14px;
+                padding: 12px 16px;
                 background-color: white;
+                color: #0A8754;
                 font-size: 14px;
-                min-height: 20px;
+                min-height: 22px;
             }
             
             QLineEdit:hover {
@@ -79,9 +92,10 @@ class ui_admin_user_managementExt(Ui_MainWindow_UserManagement):
             QComboBox {
                 border: 2px solid #E0E7E4;
                 border-radius: 10px;
-                padding: 10px 14px;
+                padding: 12px 16px;
                 background-color: white;
-                min-height: 20px;
+                color: #0A8754;
+                min-height: 22px;
                 font-size: 14px;
             }
             
@@ -111,15 +125,15 @@ class ui_admin_user_managementExt(Ui_MainWindow_UserManagement):
                 border: 2px solid #E0E7E4;
                 border-radius: 8px;
                 selection-background-color: #E8F5E9;
-                selection-color: #2D7A4E;
-                color: #2D7A4E;
+                selection-color: #0A8754;
+                color: #0A8754;
                 padding: 4px;
             }
             
             QComboBox QAbstractItemView::item {
-                padding: 8px;
+                padding: 10px;
                 border-radius: 4px;
-                color: #2D7A4E;
+                color: #0A8754;
             }
             
             QComboBox QAbstractItemView::item:hover {
@@ -130,7 +144,7 @@ class ui_admin_user_managementExt(Ui_MainWindow_UserManagement):
             QTableWidget {
                 background-color: white;
                 border: none;
-                border-radius: 12px;
+                border-radius: 14px;
                 gridline-color: #F0F4F2;
             }
             
@@ -140,24 +154,45 @@ class ui_admin_user_managementExt(Ui_MainWindow_UserManagement):
                 color: white;
                 border: none;
                 border-right: 1px solid rgba(255, 255, 255, 0.2);
-                padding: 14px 12px;
+                padding: 16px 14px;
                 font-weight: 600;
                 font-size: 13px;
                 text-transform: uppercase;
             }
             
             QTableWidget::item {
-                padding: 12px 10px;
+                padding: 14px 12px;
                 border-bottom: 1px solid #F0F4F2;
+                color: #2D7A4E;
             }
             
             QTableWidget::item:selected {
                 background-color: #E8F5E9;
-                color: #2D7A4E;
+                color: #0A8754;
             }
             
             QTableWidget::item:hover {
                 background-color: rgba(45, 122, 78, 0.05);
+            }
+            
+            /* Scrollbar styles */
+            QScrollBar:vertical {
+                background: #F8FAF9;
+                width: 14px;
+                margin: 0px;
+                border-radius: 7px;
+            }
+            
+            QScrollBar::handle:vertical {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                border-radius: 7px;
+                min-height: 30px;
+            }
+            
+            QScrollBar::handle:vertical:hover {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #246A3F, stop:1 #2D7A4E);
             }
         """)
     
@@ -198,6 +233,7 @@ class ui_admin_user_managementExt(Ui_MainWindow_UserManagement):
         self.btnSearchUser.clicked.connect(self.search_user)
         self.comboRoleFilter.currentIndexChanged.connect(self.display_users)
         self.btnRefreshUser.clicked.connect(self.refresh_all_users)
+        self.btnBackToDashboard.clicked.connect(self.back_to_dashboard)
 
     def display_users(self):
         try:
@@ -372,3 +408,14 @@ class ui_admin_user_managementExt(Ui_MainWindow_UserManagement):
             msg.setWindowTitle("Lỗi")
             msg.setIcon(QMessageBox.Icon.Critical)
             msg.exec()
+
+    def back_to_dashboard(self):
+        """Navigate back to admin dashboard"""
+        from PyQt6.QtWidgets import QMainWindow
+        from final_ml.ui.ui_admin_dashboardExt import ui_admin_dashboardExt
+        
+        self.dashboard_window = QMainWindow()
+        self.dashboard_ui = ui_admin_dashboardExt(self.current_user)
+        self.dashboard_ui.setupUi(self.dashboard_window)
+        self.dashboard_window.show()
+        self.MainWindow.close()

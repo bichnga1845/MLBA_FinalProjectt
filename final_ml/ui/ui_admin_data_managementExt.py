@@ -1,11 +1,13 @@
-from PyQt6 import QtWidgets, QtGui
+﻿from PyQt6 import QtWidgets, QtGui, QtCore
 from PyQt6.QtWidgets import QMessageBox, QFileDialog, QTableWidgetItem
 from PyQt6.QtCore import QSize
 import csv
 import os
+# from pathlib import Path
 from datetime import datetime
 
 from final_ml.connector.ml_connector import FinalConnector
+from final_ml.ui.statistics_window import StatisticsWindow
 from final_ml.ui.ui_admin_data_management import Ui_MainWindow_DataManagement
 from final_ml.ui.ui_admin_model_managementExt import ui_admin_model_managementExt
 import qtawesome as qta
@@ -17,6 +19,9 @@ class ui_admin_data_managementExt(Ui_MainWindow_DataManagement):
         self.mc = FinalConnector()
         self.current_user = current_user
         self.data_list = []
+        # self.project_root = Path(__file__).resolve().parents[2]
+        # self.default_upload_dir = Path(__file__).resolve().parents[1] / "uploads"
+        self._statistics_window = None
 
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
@@ -36,6 +41,10 @@ class ui_admin_data_managementExt(Ui_MainWindow_DataManagement):
             QMainWindow {
                 background: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
                     stop:0 #F8FAF9, stop:1 #E8F5E9);
+            }
+            
+            QLabel {
+                color: #2D7A4E;
             }
             
             QPushButton {
@@ -60,6 +69,7 @@ class ui_admin_data_managementExt(Ui_MainWindow_DataManagement):
                 border-radius: 10px;
                 padding: 10px 14px;
                 background-color: white;
+                color: #2D7A4E;
                 font-size: 14px;
                 min-height: 20px;
             }
@@ -106,11 +116,46 @@ class ui_admin_data_managementExt(Ui_MainWindow_DataManagement):
             QTableWidget::item {
                 padding: 12px 10px;
                 border-bottom: 1px solid #F0F4F2;
+                color: #2D7A4E;
             }
             
             QTableWidget::item:selected {
                 background-color: #E8F5E9;
-                color: #2D7A4E;
+                color: #0A8754;
+            }
+            
+            /* Scrollbar styles */
+            QScrollBar:vertical {
+                background: #F8FAF9;
+                width: 14px;
+                margin: 0px;
+                border-radius: 7px;
+            }
+            
+            QScrollBar::handle:vertical {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                border-radius: 7px;
+                min-height: 30px;
+            }
+            
+            QScrollBar::handle:vertical:hover {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #246A3F, stop:1 #2D7A4E);
+            }
+            
+            QScrollBar:horizontal {
+                background: #F8FAF9;
+                height: 14px;
+                margin: 0px;
+                border-radius: 7px;
+            }
+            
+            QScrollBar::handle:horizontal {
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                border-radius: 7px;
+                min-width: 30px;
             }
         """)
     
@@ -158,7 +203,10 @@ class ui_admin_data_managementExt(Ui_MainWindow_DataManagement):
         self.btnDelete.clicked.connect(self.delete_prediction)
         self.btnExport.clicked.connect(self.export_to_csv)
         self.btnAddModel.clicked.connect(self.open_model_management)
-        #self.btnStatistics.clicked.connect(self.process_statistics)
+        self.btnStatistics.clicked.connect(self.open_statistics_dashboard)
+        self.btnBackToDashboard.clicked.connect(self.back_to_dashboard)
+        # if hasattr(self, "btnStatistics"):
+        #     self.btnStatistics.clicked.connect(self.open_statistics_dashboard)
 
     # ----------------- Load data -----------------
     def load_all_data(self):
@@ -185,7 +233,7 @@ class ui_admin_data_managementExt(Ui_MainWindow_DataManagement):
             self.data_list = self.mc.fetchall(sql, None)
             self.populate_table(self.data_list)
         except Exception as e:
-            QMessageBox.critical(self.MainWindow, "Lỗi hệ thống", f"Lỗi khi tải dữ liệu: {e}")
+            QMessageBox.critical(self.MainWindow, "Lá»—i há»‡ thá»‘ng", f"Lá»—i khi táº£i dá»¯ liá»‡u: {e}")
 
     def load_model_filter(self):
         """Fill model combobox"""
@@ -195,7 +243,7 @@ class ui_admin_data_managementExt(Ui_MainWindow_DataManagement):
             models = self.mc.fetchall(sql, None)
             #print(models)
             self.comboModelFilter.clear()
-            self.comboModelFilter.addItem("Model: Tất cả")
+            self.comboModelFilter.addItem("Model: Táº¥t cáº£")
             for m in models:
                 self.comboModelFilter.addItem(m[0])
         except Exception:
@@ -207,7 +255,7 @@ class ui_admin_data_managementExt(Ui_MainWindow_DataManagement):
         for row_data in data:
             row = self.tblData.rowCount()
             self.tblData.insertRow(row)
-            for col, value in enumerate(row_data[:9]):  # 9 cột chính
+            for col, value in enumerate(row_data[:9]):  # 9 cá»™t chÃ­nh
                 self.tblData.setItem(row, col, QTableWidgetItem(str(value)))
 
     # ----------------- Search / Filter -----------------
@@ -242,6 +290,37 @@ class ui_admin_data_managementExt(Ui_MainWindow_DataManagement):
             QMessageBox.critical(self.MainWindow, "Lỗi tìm kiếm", f"{e}")
 
     # ----------------- Show details -----------------
+    # def show_details(self):
+    #     row = self.tblData.currentRow()
+    #     if row == -1:
+    #         return
+    #     try:
+    #         img_path_raw = self.tblData.item(row, 1).text()
+    #         resolved_path = self._resolve_image_path(img_path_raw)
+    #         if resolved_path and resolved_path.exists():
+    #             pixmap = QtGui.QPixmap(str(resolved_path))
+    #             if pixmap.isNull():
+    #                 self.labelPreview.setText("Ảnh không hợp lệ")
+    #             else:
+    #                 scaled = pixmap.scaled(
+    #                     self.labelPreview.size(),
+    #                     QtCore.Qt.AspectRatioMode.KeepAspectRatio,
+    #                     QtCore.Qt.TransformationMode.SmoothTransformation,
+    #                 )
+    #                 self.labelPreview.setPixmap(scaled)
+    #         else:
+    #             self.labelPreview.setText("Ảnh không tồn tại")
+
+    #         self.txtDId.setText(self.tblData.item(row, 0).text())
+    #         self.txtDImage.setText(str(resolved_path) if resolved_path else img_path_raw)
+    #         self.txtDResult.setText(self.tblData.item(row, 2).text())
+    #         self.txtDConf.setText(self.tblData.item(row, 3).text())
+    #         self.txtDUser.setText(self.tblData.item(row, 4).text())
+    #         self.txtDModel.setText(self.tblData.item(row, 5).text())
+    #         self.txtDTime.setText(self.tblData.item(row, 6).text())
+    #         self.txtDNote.setText(self.tblData.item(row, 7).text())
+    #     except Exception as e:
+    #         QMessageBox.warning(self.MainWindow, "Lỗi hiển thị chi tiết", str(e))
     def show_details(self):
         row = self.tblData.currentRow()
         if row == -1:
@@ -264,6 +343,22 @@ class ui_admin_data_managementExt(Ui_MainWindow_DataManagement):
             self.txtDNote.setText(self.tblData.item(row, 7).text())
         except Exception as e:
             QMessageBox.warning(self.MainWindow, "Lỗi hiển thị chi tiết", str(e))
+
+
+    # def _resolve_image_path(self, raw: str) -> Path | None:
+    #     if not raw:
+    #         return None
+    #     candidate = Path(raw.strip())
+    #     if candidate.is_file():
+    #         return candidate
+    #     if not candidate.is_absolute():
+    #         candidate_root = (self.project_root / candidate).resolve()
+    #         if candidate_root.is_file():
+    #             return candidate_root
+    #     alt = (self.default_upload_dir / candidate.name).resolve()
+    #     if alt.is_file():
+    #         return alt
+    #     return candidate if candidate.exists() else None
 
     # ----------------- Upload new image -----------------
     def upload_image(self):
@@ -353,3 +448,22 @@ class ui_admin_data_managementExt(Ui_MainWindow_DataManagement):
         self.ui.setupUi(self.window)
         #self.MainWindow.close()
         self.window.show()
+
+    def open_statistics_dashboard(self):
+        """Open the standalone statistics dashboard window."""
+        if self._statistics_window is None or not self._statistics_window.isVisible():
+            self._statistics_window = StatisticsWindow(self.MainWindow)
+            self._statistics_window.destroyed.connect(lambda: setattr(self, "_statistics_window", None))
+        self._statistics_window.show()
+        self._statistics_window.raise_()
+
+    def back_to_dashboard(self):
+        """Navigate back to admin dashboard"""
+        from PyQt6.QtWidgets import QMainWindow
+        from final_ml.ui.ui_admin_dashboardExt import ui_admin_dashboardExt
+        
+        self.dashboard_window = QMainWindow()
+        self.dashboard_ui = ui_admin_dashboardExt(self.current_user)
+        self.dashboard_ui.setupUi(self.dashboard_window)
+        self.dashboard_window.show()
+        self.MainWindow.close()

@@ -1,7 +1,14 @@
 import json
 import os
-from PyQt6.QtWidgets import QMessageBox, QMainWindow
-from PyQt6.QtCore import QSize
+from pathlib import Path
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtWidgets import (
+    QMessageBox,
+    QMainWindow,
+    QGraphicsOpacityEffect,
+    QLabel,
+)
+from PyQt6.QtCore import QSize, Qt
 from final_ml.connector.ml_connector import FinalConnector
 from final_ml.ui.ui_login_signup import Ui_MainWindow_LoginSignUp
 from final_ml.ui.ui_admin_dashboardExt import ui_admin_dashboardExt
@@ -29,212 +36,149 @@ def clear_credentials():
         os.remove("credentials.json")
 
 class ui_login_signupExt(Ui_MainWindow_LoginSignUp):
-    def __init__(self):
+    def __init__(self, brand_logo_path: str | None = None, hero_background_path: str | None = None):
         super().__init__()
         self.mc = FinalConnector()
         self.MainWindow = None
+        base_dir = Path(__file__).resolve().parent.parent
+        default_logo = base_dir / "uploads" / "logo.jpg"
+        default_bg = base_dir / "uploads" / "hero_bg.jpg"
+        self.brand_logo_path = (
+            brand_logo_path
+            or os.getenv("FRUIT_APP_LOGO")
+            or (str(default_logo) if default_logo.exists() else None)
+        )
+        self.hero_background_path = (
+            hero_background_path
+            or os.getenv("FRUIT_APP_HERO_BG")
+            or (str(default_bg) if default_bg.exists() else str(default_logo) if default_logo.exists() else None)
+        )
+        self._hero_overlay_pixmap = None
+        self._hero_resize_hooked = False
 
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
         self.MainWindow = MainWindow
         self.apply_premium_styles()
         self.add_premium_icons()
+        self.configure_hero_copy()
+        self.hide_role_inputs()
+        self.set_brand_logo(self.brand_logo_path)
+        self.set_hero_background(self.hero_background_path)
         self.setupSignalAndSlot()
         self.load_saved_credentials()
     
     def apply_premium_styles(self):
-        """Apply ultra premium stylesheet with gradients and effects"""
-        self.MainWindow.setStyleSheet("""
-            /* Main Window Background */
-            QMainWindow {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
-                    stop:0 #F8FAF9, stop:1 #E8F5E9);
-            }
-            
-            /* Title Styles */
-            QLabel#lblTitle {
-                font-size: 32px;
-                font-weight: 700;
-                color: #2D7A4E;
-                letter-spacing: -0.5px;
-                background: transparent;
-            }
-            
-            QLabel#lblSubtitle {
-                font-size: 13px;
-                color: #5A7A6A;
-                background: transparent;
-                margin-top: 4px;
-            }
-            
-            /* Field Labels */
-            QLabel {
-                color: #1A3A2E;
-                font-weight: 600;
-                font-size: 12px;
-                background: transparent;
-            }
-            
-            /* Tab Widget */
-            QTabWidget::pane {
-                border: none;
-                background: transparent;
-            }
-            
+        extra = """
+            QTabWidget::pane { border: none; background: transparent; }
             QTabBar::tab {
                 background: transparent;
-                color: #8B9D94;
+                color: #9AA8A0;
                 border: none;
                 border-bottom: 3px solid transparent;
-                padding: 10px 24px;
+                padding: 10px 20px;
                 font-weight: 600;
                 font-size: 14px;
-                margin-right: 4px;
+                margin-right: 6px;
             }
-            
-            QTabBar::tab:selected {
-                color: #2D7A4E;
-                border-bottom: 3px solid #2D7A4E;
-            }
-            
-            QTabBar::tab:hover {
-                color: #4A9D6E;
-                background-color: rgba(45, 122, 78, 0.05);
-                border-radius: 8px 8px 0 0;
-            }
-            
-            /* Input Fields with Premium Style */
-            QLineEdit {
-                border: 2px solid #E0E7E4;
-                border-radius: 10px;
-                padding: 11px 14px;
-                background-color: #FFFFFF;
-                font-size: 13px;
-                color: #1A3A2E;
-                min-height: 34px;
-            }
-            
-            QLineEdit:hover {
-                border-color: #4A9D6E;
-                background-color: rgba(45, 122, 78, 0.02);
-            }
-            
-            QLineEdit:focus {
-                border-color: #2D7A4E;
-                background-color: #FAFFFE;
-            }
-            
-            /* ComboBox Premium Style */
-            QComboBox {
-                border: 2px solid #E0E7E4;
-                border-radius: 10px;
-                padding: 9px 12px;
-                background-color: #FFFFFF;
-                color: #2D7A4E;
-                min-height: 34px;
-                font-size: 13px;
-            }
-            
-            QComboBox:hover {
-                border-color: #4A9D6E;
-            }
-            
-            QComboBox:focus {
-                border-color: #2D7A4E;
-            }
-            
-            QComboBox::drop-down {
-                border: none;
-                width: 36px;
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
-                    stop:0 #2D7A4E, stop:1 #4A9D6E);
-                border-top-right-radius: 8px;
-                border-bottom-right-radius: 8px;
-            }
-            
-            QComboBox::down-arrow {
-                image: none;
-                border-left: 5px solid transparent;
-                border-right: 5px solid transparent;
-                border-top: 6px solid white;
-                margin-right: 10px;
-            }
-            
-            QComboBox QAbstractItemView {
-                background-color: white;
-                border: 2px solid #E0E7E4;
-                border-radius: 10px;
-                selection-background-color: #E8F5E9;
-                selection-color: #2D7A4E;
-                color: #2D7A4E;
-                padding: 4px;
-            }
-            
-            QComboBox QAbstractItemView::item {
-                padding: 10px;
-                border-radius: 6px;
-                color: #2D7A4E;
-            }
-            
-            QComboBox QAbstractItemView::item:hover {
-                background-color: #E8F5E9;
-            }
-            
-            /* Premium Gradient Buttons */
-            QPushButton {
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
-                    stop:0 #2D7A4E, stop:1 #4A9D6E);
-                color: white;
-                border: none;
-                border-radius: 10px;
-                padding: 12px 20px;
-                font-size: 14px;
-                font-weight: 600;
-                min-height: 38px;
-            }
-            
-            QPushButton:hover {
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
-                    stop:0 #246A3F, stop:1 #2D7A4E);
-            }
-            
-            QPushButton:pressed {
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
-                    stop:0 #1E5A35, stop:1 #246A3F);
-            }
-            
-            /* Checkbox Premium Style */
-            QCheckBox {
-                color: #2D7A4E;
-                spacing: 8px;
-                font-size: 12px;
-            }
-            
-            QCheckBox::indicator {
-                width: 18px;
-                height: 18px;
-                border: 2px solid #E0E7E4;
-                border-radius: 5px;
-                background-color: white;
-            }
-            
-            QCheckBox::indicator:hover {
-                border-color: #4A9D6E;
-            }
-            
-            QCheckBox::indicator:checked {
-                background-color: #2D7A4E;
-                border-color: #2D7A4E;
-            }
-            
-            /* Card Style */
-            QFrame#loginCard {
-                background-color: rgba(255, 255, 255, 0.98);
-                border: 1px solid rgba(224, 231, 228, 0.5);
-                border-radius: 16px;
-            }
-        """)
-    
+            QTabBar::tab:selected { color: #0A8754; border-bottom: 3px solid #0A8754; }
+            QTabBar::tab:hover { color: #0BBE6E; }
+            QLabel#lblAuthStatus { letter-spacing: 0.5px; }
+        """
+        base = self.MainWindow.styleSheet() or ''
+        self.MainWindow.setStyleSheet(base + '\n' + extra)
+
+    def configure_hero_copy(self):
+        if hasattr(self, 'lblWelcome'):
+            self.lblWelcome.setText('Welcome back!')
+        if hasattr(self, 'lblSubtitle'):
+            self.lblSubtitle.setText('hihihi')
+        if hasattr(self, 'heroDescription'):
+            self.heroDescription.setText('Sign in to sync prediction data and shipment history.')
+        if hasattr(self, 'heroCTA'):
+            self.heroCTA.setText('Explore dashboard')
+
+    def hide_role_inputs(self):
+        """Hide role selection on login; role is determined automatically from the account."""
+        for widget_name in ("lblRoleLogin", "comboRoleLogin"):
+            widget = getattr(self, widget_name, None)
+            if widget:
+                widget.hide()
+
+    def set_brand_logo(self, image_path: str | None):
+        if not hasattr(self, 'logoLabel'):
+            return
+        final_path = image_path
+        if not final_path:
+            candidate = os.path.join(os.path.dirname(__file__), '../final_ml/upload/logo.jpg')
+            if os.path.exists(candidate):
+                final_path = candidate
+        if not final_path or not os.path.exists(final_path):
+            return
+        pix = QPixmap(final_path)
+        if pix.isNull():
+            return
+        scaled = pix.scaled(
+            self.logoLabel.width(),
+            self.logoLabel.height(),
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
+        )
+        self.logoLabel.setPixmap(scaled)
+        self.logoLabel.setStyleSheet('border-radius:48px;')
+        self.logoLabel.setText('')
+
+    def set_hero_background(self, image_path: str | None):
+        if not hasattr(self, 'heroPanel'):
+            return
+        if not image_path:
+            if hasattr(self, 'heroOverlay'):
+                self.heroOverlay.hide()
+            return
+        normalized = Path(image_path)
+        if not normalized.exists():
+            return
+        pix = QPixmap(str(normalized))
+        if pix.isNull():
+            return
+        self._hero_overlay_pixmap = pix
+        if not hasattr(self, 'heroOverlay'):
+            self.heroOverlay = QLabel(parent=self.heroPanel)
+            self.heroOverlay.setObjectName("heroOverlay")
+            self.heroOverlay.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
+            self.heroOverlay.setScaledContents(True)
+            opacity = QGraphicsOpacityEffect(self.heroOverlay)
+            opacity.setOpacity(0.25)
+            self.heroOverlay.setGraphicsEffect(opacity)
+        self.heroOverlay.show()
+        self.heroOverlay.lower()
+        self._update_hero_overlay_geometry()
+        if not self._hero_resize_hooked:
+            original_resize = self.heroPanel.resizeEvent
+
+            def _resized(event):
+                self._update_hero_overlay_geometry()
+                if original_resize:
+                    original_resize(event)
+
+            self.heroPanel.resizeEvent = _resized
+            self._hero_resize_hooked = True
+
+    def _update_hero_overlay_geometry(self):
+        if not hasattr(self, 'heroOverlay') or self._hero_overlay_pixmap is None:
+            return
+        panel_rect = self.heroPanel.rect()
+        if panel_rect.width() <= 0 or panel_rect.height() <= 0:
+            return
+        self.heroOverlay.setGeometry(0, 0, panel_rect.width(), panel_rect.height())
+        scaled = self._hero_overlay_pixmap.scaled(
+            self.heroOverlay.size(),
+            Qt.AspectRatioMode.KeepAspectRatioByExpanding,
+            Qt.TransformationMode.SmoothTransformation,
+        )
+        self.heroOverlay.setPixmap(scaled)
+
+
     def add_premium_icons(self):
         """Add FontAwesome icons to buttons and inputs"""
         try:
@@ -311,7 +255,8 @@ class ui_login_signupExt(Ui_MainWindow_LoginSignUp):
                 "password":user[3]
             }
 
-            if current_user['role'] == "admin":
+            role = (user[4] or "").lower()
+            if role == "admin":
                 self.open_admin_dashboard(current_user)
             else:
                 self.open_user_upload(current_user)

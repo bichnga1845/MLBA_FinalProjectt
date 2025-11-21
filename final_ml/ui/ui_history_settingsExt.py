@@ -35,11 +35,12 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
         self.load_history()
     
     def apply_premium_style(self):
-        """Apply premium history & settings stylesheet"""
+        """Apply history & settings """
         self.MainWindow.setStyleSheet("""
             QMainWindow {
                 background: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
                     stop:0 #F8FAF9, stop:1 #E8F5E9);
+                color: #2D7A4E;
             }
             
             QPushButton {
@@ -58,12 +59,15 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
                 background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
                     stop:0 #246A3F, stop:1 #2D7A4E);
             }
-            
+            QLabel {
+                color: #2D7A4E;
+            }
             QLineEdit, QDateEdit {
                 border: 2px solid #E0E7E4;
                 border-radius: 10px;
                 padding: 10px 14px;
                 background-color: white;
+                color: #2D7A4E;
                 font-size: 14px;
                 min-height: 20px;
             }
@@ -81,6 +85,7 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
                 border-radius: 10px;
                 padding: 10px 14px;
                 background-color: white;
+                color: #0A8754;
                 font-size: 14px;
                 min-height: 20px;
             }
@@ -107,15 +112,15 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
                 border: 2px solid #E0E7E4;
                 border-radius: 8px;
                 selection-background-color: #E8F5E9;
-                selection-color: #2D7A4E;
-                color: #2D7A4E;
+                selection-color: #0A8754;
+                color: #0A8754;
                 padding: 4px;
             }
             
             QComboBox QAbstractItemView::item {
                 padding: 8px;
                 border-radius: 4px;
-                color: #2D7A4E;
+                color: #0A8754;
             }
             
             QComboBox QAbstractItemView::item:hover {
@@ -143,11 +148,12 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
             QTableWidget::item {
                 padding: 12px 10px;
                 border-bottom: 1px solid #F0F4F2;
+                color: #2D7A4E;
             }
             
             QTableWidget::item:selected {
                 background-color: #E8F5E9;
-                color: #2D7A4E;
+                color: #0A8754;
             }
             
             QTabWidget::pane {
@@ -175,6 +181,21 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
                 color: #4A9D6E;
                 background-color: rgba(45, 122, 78, 0.05);
                 border-radius: 8px 8px 0 0;
+            }
+            
+            /* Scrollbar styles */
+            QScrollBar:vertical {
+                background: #F8FAF9;
+                width: 14px;
+                margin: 0px;
+                border-radius: 7px;
+            }
+            
+            QScrollBar::handle:vertical {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                border-radius: 7px;
+                min-height: 30px;
             }
         """)
     
@@ -213,6 +234,7 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
         self.dateTo.dateChanged.connect(self.filter_history)
         
         # Tab Settings
+        self.btnBackToDashboard.clicked.connect(self.back_to_dashboard)
         self.btnUpdateProfile.clicked.connect(self.update_profile)
         self.btnLogout.clicked.connect(self.logout)
         
@@ -240,9 +262,9 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
                     p.confidence,
                     p.predicted_at,
                     m.model_name
-                FROM Predictions p
-                JOIN Uploads u ON p.upload_id = u.upload_id
-                LEFT JOIN Models m ON p.model_id = m.model_id
+                FROM predictions p
+                JOIN uploads u ON p.upload_id = u.upload_id
+                LEFT JOIN models m ON p.model_id = m.model_id
                 WHERE u.user_id = %s
                 ORDER BY p.predicted_at DESC
             """
@@ -352,7 +374,7 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
                 pred_id_item = self.tblHistory.item(row, 0)
                 if pred_id_item:
                     pred_id = pred_id_item.text()
-                    sql = "DELETE FROM Predictions WHERE prediction_id = %s"
+                    sql = "DELETE FROM predictions WHERE prediction_id = %s"
                     self.mc.insert_one(sql, (pred_id,))
 
             QMessageBox.information(
@@ -401,7 +423,7 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
 
             # UPDATE user info
             sql_user = """
-                        UPDATE Users 
+                        UPDATE users 
                         SET full_name = %s, email = %s 
                         WHERE user_id = %s
                     """
@@ -410,13 +432,13 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
             # ĐỔI PASSWORD THÌ XỬ LÝ
             if want_change_pw:
                 # Verify old password
-                sql_check = "SELECT password FROM Users WHERE user_id=%s"
+                sql_check = "SELECT password FROM users WHERE user_id=%s"
                 old_pw_db = self.mc.fetchone(sql_check, (self.current_user['user_id'],))
                 if not old_pw_db or old_password != old_pw_db[0]:
                     QMessageBox.warning(self.MainWindow, "Sai mật khẩu", "Mật khẩu cũ không chính xác!")
                     return
                 # Update new password
-                sql_pw = "UPDATE Users SET password=%s WHERE user_id=%s"
+                sql_pw = "UPDATE users SET password=%s WHERE user_id=%s"
                 self.mc.insert_one(sql_pw, (new_password, self.current_user['user_id']))
                 self.current_user['password'] = new_password
 
@@ -449,3 +471,14 @@ class ui_history_settingsExt(Ui_MainWindow_HistorySettings):
             self.login_ui.setupUi(self.login_window)
             self.login_window.show()
             self.MainWindow.close()
+
+    def back_to_dashboard(self):
+        """Navigate back to upload/dashboard"""
+        from final_ml.ui.ui_upload_imageExt import ui_upload_imageExt
+        from PyQt6.QtWidgets import QMainWindow
+        
+        self.dashboard_window = QMainWindow()
+        self.dashboard_ui = ui_upload_imageExt(self.current_user)
+        self.dashboard_ui.setupUi(self.dashboard_window)
+        self.dashboard_window.show()
+        self.MainWindow.close()

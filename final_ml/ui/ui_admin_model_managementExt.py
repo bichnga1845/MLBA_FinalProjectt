@@ -34,7 +34,9 @@ class ui_admin_model_managementExt(Ui_MainWindow_ModelManagement):
                 background: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
                     stop:0 #F8FAF9, stop:1 #E8F5E9);
             }
-            
+            QLabel {
+                color: #2D7A4E;
+            }
             QPushButton {
                 background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
                     stop:0 #2D7A4E, stop:1 #4A9D6E);
@@ -57,6 +59,7 @@ class ui_admin_model_managementExt(Ui_MainWindow_ModelManagement):
                 border-radius: 10px;
                 padding: 10px 14px;
                 background-color: white;
+                color: #0A8754;
                 font-size: 14px;
                 min-height: 20px;
             }
@@ -86,11 +89,27 @@ class ui_admin_model_managementExt(Ui_MainWindow_ModelManagement):
             QTableWidget::item {
                 padding: 12px 10px;
                 border-bottom: 1px solid #F0F4F2;
+                color: #2D7A4E;
             }
             
             QTableWidget::item:selected {
                 background-color: #E8F5E9;
-                color: #2D7A4E;
+                color: #0A8754;
+            }
+            
+            /* Scrollbar styles */
+            QScrollBar:vertical {
+                background: #F8FAF9;
+                width: 14px;
+                margin: 0px;
+                border-radius: 7px;
+            }
+            
+            QScrollBar::handle:vertical {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #2D7A4E, stop:1 #4A9D6E);
+                border-radius: 7px;
+                min-height: 30px;
             }
         """)
     
@@ -130,6 +149,7 @@ class ui_admin_model_managementExt(Ui_MainWindow_ModelManagement):
         self.btnSearchModel.clicked.connect(self.search_model)
         self.btnDeleteModel.clicked.connect(self.delete_model)
         self.btnRefreshModels.clicked.connect(self.load_models)
+        self.btnBackToDashboard.clicked.connect(self.back_to_dashboard)
 
     def load_models(self):
         self.mc.connect()
@@ -225,3 +245,14 @@ class ui_admin_model_managementExt(Ui_MainWindow_ModelManagement):
             msg.setWindowTitle("Lỗi")
             msg.setIcon(QMessageBox.Icon.Critical)
             msg.exec()
+
+    def back_to_dashboard(self):
+        """Navigate back to admin dashboard"""
+        from PyQt6.QtWidgets import QMainWindow
+        from final_ml.ui.ui_admin_dashboardExt import ui_admin_dashboardExt
+        
+        self.dashboard_window = QMainWindow()
+        self.dashboard_ui = ui_admin_dashboardExt(self.current_user)
+        self.dashboard_ui.setupUi(self.dashboard_window)
+        self.dashboard_window.show()
+        self.MainWindow.close()

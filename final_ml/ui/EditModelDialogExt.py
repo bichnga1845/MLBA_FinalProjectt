@@ -6,7 +6,6 @@ from final_ml.connector.ml_connector import FinalConnector
 from final_ml.ui.EditModelDialog import Ui_Dialog
 import qtawesome as qta
 
-
 class EditModelDialogExt(QDialog, Ui_Dialog):
     def __init__(self,current_user,model_id):
         super().__init__()
@@ -68,6 +67,7 @@ class EditModelDialogExt(QDialog, Ui_Dialog):
                 border-radius: 8px;
                 padding: 8px 12px;
                 background-color: white;
+                color: #0A8754;
                 font-size: 13px;
                 min-height: 18px;
             }
@@ -85,15 +85,15 @@ class EditModelDialogExt(QDialog, Ui_Dialog):
                 border: 2px solid #E0E7E4;
                 border-radius: 8px;
                 selection-background-color: #E8F5E9;
-                selection-color: #2D7A4E;
-                color: #2D7A4E;
+                selection-color: #0A8754;
+                color: #0A8754;
                 padding: 4px;
             }
             
             QComboBox QAbstractItemView::item {
                 padding: 8px;
                 border-radius: 4px;
-                color: #2D7A4E;
+                color: #0A8754;
             }
             
             QComboBox QAbstractItemView::item:hover {

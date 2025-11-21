@@ -1,0 +1,2 @@
+username,image_path,fruit,quality,confidence,model_name
+testuser,../uploads/IMG_0114.JPG,Unknown,Unknown,68.0,MobileNetV2 Type

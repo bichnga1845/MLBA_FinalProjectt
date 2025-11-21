@@ -13,6 +13,7 @@ class ui_upload_imageExt(QWidget):
     def __init__(self, current_user):
         super().__init__()
         self.current_user = current_user
+        self.upload_image_id = None
         self.mc = FinalConnector()
         
     def setupUi(self, MainWindow):
@@ -32,7 +33,7 @@ class ui_upload_imageExt(QWidget):
         lbl_title.setObjectName("pageTitle")
         layout.addWidget(lbl_title)
 
-        lbl_intro = QLabel("📤 Tải ảnh trái cây lên để hệ thống AI phân tích và phân loại chất lượng")
+        lbl_intro = QLabel(" Tải ảnh trái cây lên để hệ thống AI phân tích và phân loại chất lượng")
         lbl_intro.setObjectName("pageSubtitle")
         lbl_intro.setWordWrap(True)
         layout.addWidget(lbl_intro)
@@ -146,6 +147,10 @@ class ui_upload_imageExt(QWidget):
             #Lưu đường dẫn hình vừa upload để dự đoán
             self.image_path=dest_path
 
+            sql="""Select upload_id from uploads where user_id=%s and image_url=%s"""
+            val=(uid,dest_path)
+            self.upload_image_id=self.mc.fetchone(sql,val)[0]
+
             QMessageBox.information(None, "Thành công", f"Ảnh {file_name} đã được tải lên thành công!")
             self.load_all_upload_image()
 
@@ -174,6 +179,11 @@ class ui_upload_imageExt(QWidget):
             # Lưu lại để dùng cho Predict
             self.image_path = image_path
 
+            self.mc.connect()
+            sql = """Select upload_id from uploads where user_id=%s and image_url=%s"""
+            val = (self.current_user['user_id'], image_path)
+            self.upload_image_id = self.mc.fetchone(sql, val)[0]
+
             QMessageBox.information(
                 self.MainWindow,
                 "Thành công",
@@ -189,7 +199,7 @@ class ui_upload_imageExt(QWidget):
             return
         from PyQt6.QtWidgets import QMainWindow
         self.window = QMainWindow()
-        self.ui = ui_resultExt(self.current_user,self.image_path)
+        self.ui = ui_resultExt(self.current_user, self.image_path, self.upload_image_id)
         self.ui.setupUi(self.window)
         self.MainWindow.close()
         self.window.show()
@@ -230,12 +240,14 @@ class ui_upload_imageExt(QWidget):
         self.window.show()
 
     def apply_premium_style(self, widget):
-        """Apply ultra premium stylesheet"""
+        """History"""
         widget.setStyleSheet("""
             /* Main Window */
             QMainWindow {
                 background: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
                     stop:0 #F8FAF9, stop:1 #E8F5E9);
+                color: #2D7A4E;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
             
             /* Page Title */
@@ -285,19 +297,16 @@ class ui_upload_imageExt(QWidget):
                 font-size: 16px;
                 font-weight: 600;
                 letter-spacing: 0.3px;
-                box-shadow: 0px 4px 10px rgba(21, 101, 192, 0.3);
             }
             
             QPushButton#btnPredict:hover {
                 background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                     stop:0 #0D47A1, stop:1 #1565C0);
-                box-shadow: 0px 6px 14px rgba(21, 101, 192, 0.45);
             }
             
             QPushButton#btnPredict:pressed {
                 background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                     stop:0 #0B3C91, stop:1 #0D47A1);
-                box-shadow: inset 0px 3px 8px rgba(0, 0, 0, 0.2);
             }
             
             /* Secondary Button */
@@ -356,6 +365,7 @@ class ui_upload_imageExt(QWidget):
                 padding: 14px 12px;
                 border-bottom: 1px solid #F0F4F2;
                 font-size: 13px;
+                color: #2D7A4E;
             }
             
             QTableWidget::item:selected {

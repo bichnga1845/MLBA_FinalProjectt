@@ -22,9 +22,10 @@ mock_user = {
 
 # ✅ Giả lập đường dẫn ảnh (thay đổi đường dẫn này theo ảnh thực tế của bạn)
 # Nếu không có ảnh, có thể để đường dẫn trống hoặc ảnh bất kỳ
-image_path = os.path.join(os.getcwd(), "final_ml", "uploads", "test_image.jpg")
+#image_path = os.path.join(os.getcwd(), "final_ml", "uploads", "test_image.jpg")
 # Hoặc dùng ảnh demo:
 # image_path = "d:/MLBA_FinalProjectt/file_test_image_may_be_used/test_apple.jpg"
+image_path="../uploads/apple.jpg"
 
 # ✅ Giả lập kết quả dự đoán
 mock_prediction = {
@@ -42,8 +43,7 @@ main_window = QMainWindow()
 # ✅ Khởi tạo giao diện result với dữ liệu giả lập
 result_ui = ui_resultExt(
     current_user=mock_user,
-    image_path=image_path,
-    prediction_result=mock_prediction
+    image_path=image_path
 )
 
 # ✅ Thiết lập UI trên cửa sổ chính
